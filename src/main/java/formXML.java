@@ -278,6 +278,45 @@ public class formXML {
                 primitiveElement.setAttribute("byteOrder", primitive.getType());
             }
 
+            for (Structures structure : structure_list) {
+                Element structureElement = doc.createElement("structure");
+                rootElement.appendChild(structureElement);
+                structureElement.setAttribute("name", structure.getName());
+                for (StructureFields field : structure.getStructurefields()) {
+                    Element fieldElement = doc.createElement("field");
+                    structureElement.appendChild(fieldElement);
+                    fieldElement.setAttribute("name", field.getName());
+                    fieldElement.setAttribute("type", field.getType());
+                    fieldElement.setAttribute("elementCountStructureField", field.getElementCountStructureField());
+                    fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
+                }
+            }
+
+            for(Messages message : message_list){
+                Element messageElement = doc.createElement("message");
+                rootElement.appendChild(messageElement);
+                messageElement.setAttribute("name", message.getName());
+                messageElement.setAttribute("id", message.getId());
+                for(MessageFields field : message.getMessageFields()){
+                    Element fieldElement = doc.createElement("field");
+                    messageElement.appendChild(fieldElement);
+                    fieldElement.setAttribute("name", field.getName());
+                    fieldElement.setAttribute("getfIndex", field.getfIndex());
+                    fieldElement.setAttribute("type", field.getType());
+                    fieldElement.setAttribute("elementCountField", field.getElementCountField());
+                }
+            }
+
+            for(ArrayType arrayType : arraytype_list){
+                Element arrayTypeElement = doc.createElement("arrayType");
+                rootElement.appendChild(arrayTypeElement);
+                arrayTypeElement.setAttribute("name", arrayType.getName());
+                arrayTypeElement.setAttribute("elementType", arrayType.getElementType());
+                arrayTypeElement.setAttribute("constantElementCount", arrayType.getConstantElementCount());
+            }
+
+           
+
             // print XML to system console
             writeXml(doc, System.out);
 
