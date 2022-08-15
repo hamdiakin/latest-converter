@@ -8,20 +8,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Comment;
+import java.io.OutputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -134,7 +131,7 @@ public class formXML {
             iterator = datatypeSheet.iterator();
 
             // all the part below belongs to message type part
-            contdPart = false;
+            contdPart = true;
             int sheetNumber = 3;
             counter = 0;
             String previousIdentifier = "";
@@ -201,10 +198,11 @@ public class formXML {
                                     messageID = line[2];
                                 }
 
-                                message_list.add(new Messages(name, messageID, message_fields));
+                                message_list.add(new Messages(name, messageID, new ArrayList<>(message_fields)));
                                 contdPart = true;
                                 // get the last item of the array list
                                 message_info.clear();
+                                message_fields.clear();
                                 message_info.add(lastItem);
                             }
 
@@ -265,12 +263,18 @@ public class formXML {
 
             // root elements
             Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("types");
-            doc.appendChild(rootElement);
+            Element root = doc.createElement("TA");
+            doc.appendChild(root);
+
+            Element rootTypes = doc.createElement("types");
+            root.appendChild(rootTypes);
+
+            Element rootMessages = doc.createElement("messages");
+            root.appendChild(rootMessages);
 
             for (Primitives primitive : primitive_list) {
                 Element primitiveElement = doc.createElement("primitive");
-                rootElement.appendChild(primitiveElement);
+                rootTypes.appendChild(primitiveElement);
                 primitiveElement.setAttribute("name", primitive.getName());
                 primitiveElement.setAttribute("id", primitive.getFormat());
                 primitiveElement.setAttribute("type", primitive.getSizeInBytes());
@@ -280,42 +284,46 @@ public class formXML {
 
             for (Structures structure : structure_list) {
                 Element structureElement = doc.createElement("structure");
-                rootElement.appendChild(structureElement);
+                rootTypes.appendChild(structureElement);
                 structureElement.setAttribute("name", structure.getName());
                 for (StructureFields field : structure.getStructurefields()) {
                     Element fieldElement = doc.createElement("field");
                     structureElement.appendChild(fieldElement);
                     fieldElement.setAttribute("name", field.getName());
                     fieldElement.setAttribute("type", field.getType());
-                    fieldElement.setAttribute("elementCountStructureField", field.getElementCountStructureField());
+                    fieldElement.setAttribute("elementCountStructureField",
+                            field.getElementCountStructureField());
                     fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
                 }
             }
 
-            for(Messages message : message_list){
+            for (ArrayType arrayType : arraytype_list) {
+                Element arrayTypeElement = doc.createElement("arrayType");
+                rootTypes.appendChild(arrayTypeElement);
+                arrayTypeElement.setAttribute("name", arrayType.getName());
+                arrayTypeElement.setAttribute("elementType", arrayType.getElementType());
+                arrayTypeElement.setAttribute("constantElementCount",
+                        arrayType.getConstantElementCount());
+            }
+
+            Element messagesElement = doc.createElement("messages");
+            root.appendChild(messagesElement);
+
+            for (Messages message : message_list) {
                 Element messageElement = doc.createElement("message");
-                rootElement.appendChild(messageElement);
+                messagesElement.appendChild(messageElement);
                 messageElement.setAttribute("name", message.getName());
                 messageElement.setAttribute("id", message.getId());
-                for(MessageFields field : message.getMessageFields()){
+                for (MessageFields field : message.getMessageFields()) {
                     Element fieldElement = doc.createElement("field");
                     messageElement.appendChild(fieldElement);
                     fieldElement.setAttribute("name", field.getName());
-                    fieldElement.setAttribute("getfIndex", field.getfIndex());
                     fieldElement.setAttribute("type", field.getType());
-                    fieldElement.setAttribute("elementCountField", field.getElementCountField());
+                    fieldElement.setAttribute("elementCountMessageField",
+                            field.getElementCountField());
+                    fieldElement.setAttribute("fieldIndex", field.getfIndex());
                 }
             }
-
-            for(ArrayType arrayType : arraytype_list){
-                Element arrayTypeElement = doc.createElement("arrayType");
-                rootElement.appendChild(arrayTypeElement);
-                arrayTypeElement.setAttribute("name", arrayType.getName());
-                arrayTypeElement.setAttribute("elementType", arrayType.getElementType());
-                arrayTypeElement.setAttribute("constantElementCount", arrayType.getConstantElementCount());
-            }
-
-           
 
             // print XML to system console
             writeXml(doc, System.out);
@@ -337,10 +345,10 @@ public class formXML {
         Transformer transformer = transformerFactory.newTransformer();
 
         // pretty print
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes" );
 
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(output);
+        StreamResult result = new StreamResult(new File("ata.xml"));
 
         transformer.transform(source, result);
 
