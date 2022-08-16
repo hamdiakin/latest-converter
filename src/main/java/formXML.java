@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,6 +18,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.OutputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 
@@ -101,20 +99,23 @@ public class formXML {
                             lineThree = line[3];
                             samePart = false;
                         }
-                        if (samePart) {
-                            if (line[3].equals("HEADER")) {
-                                headerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
-                            } else if (line[3].equals("FOOTER")) {
-                                footerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
-                            } else if (line[3].equals("MESSAGES")) {
-                                codecMessages.add(new CodecMessage(line[4]));
-                            }
+
+                        if (line[3].equals("HEADER")) {
+                            headerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
                         }
+                        // TODO: code is never getting into this field
+                        // thus no footer element has been added
+                        else if (line[3].equals("FOOTER")) {
+                            footerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
+                        } else if (line[3].equals("MESSAGES")) {
+                            codecMessages.add(new CodecMessage(line[4]));
+                        }
+
                         name = line[1];
                         byteOrder = line[2];
                     }
-                    codec_list.add(new Codecs(name, byteOrder, new CodecHeader(headerFields),
-                            new CodecFooter(footerFields), codecMessages));
+                    codec_list.add(new Codecs(name, byteOrder, new CodecHeader(new ArrayList<>(headerFields)),
+                            new CodecFooter(new ArrayList<>(footerFields)), new ArrayList<>(codecMessages)));
 
                     contdPart = true;
                     // get the last item of the array list
@@ -125,7 +126,7 @@ public class formXML {
                     codecInfo.add(lastItem);
                 }
 
-                System.out.println();
+                // System.out.println();
             }
             datatypeSheet = workbook.getSheetAt(0);
             iterator = datatypeSheet.iterator();
@@ -153,7 +154,6 @@ public class formXML {
 
             while (sheetNumber >= 0) {
                 // dont touch above
-
                 datatypeSheet = workbook.getSheetAt(sheetNumber);
                 iterator = datatypeSheet.iterator();
                 while (iterator.hasNext()) {
@@ -162,14 +162,14 @@ public class formXML {
                     counter = 0;
                     while (cellIterator.hasNext()) {
                         Cell currentCell = cellIterator.next();
-                        System.out.print(currentCell.getStringCellValue() + "--");
+                        // System.out.print(currentCell.getStringCellValue() + "--");
                         counter++;
                         lineInfo[counter] = currentCell.getStringCellValue();
                     }
                     message_info.add(Arrays.copyOf(lineInfo, 10));
 
                     Arrays.fill(lineInfo, "");
-                    System.out.println();
+                    // System.out.println();
 
                     switch (sheetNumber) {
                         case 3:
@@ -262,15 +262,22 @@ public class formXML {
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
             // root elements
+
             Document doc = docBuilder.newDocument();
+
             Element root = doc.createElement("TA");
             doc.appendChild(root);
 
+            // line breaker
+            Text lineBreak6 = (Text) doc.createTextNode("\n\n");
+            root.appendChild(lineBreak6);
+
+            root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+            root.setAttribute("xsi:noNamespaceSchemaLocation", "TA.xsd");
+
             Element rootTypes = doc.createElement("types");
             root.appendChild(rootTypes);
-
-            Element rootMessages = doc.createElement("messages");
-            root.appendChild(rootMessages);
 
             for (Primitives primitive : primitive_list) {
                 Element primitiveElement = doc.createElement("primitive");
@@ -281,6 +288,9 @@ public class formXML {
                 primitiveElement.setAttribute("size", primitive.getSizeInBits());
                 primitiveElement.setAttribute("byteOrder", primitive.getType());
             }
+            // line breaker
+            Text lineBreak = (Text) doc.createTextNode("\n");
+            rootTypes.appendChild(lineBreak);
 
             for (Structures structure : structure_list) {
                 Element structureElement = doc.createElement("structure");
@@ -291,20 +301,32 @@ public class formXML {
                     structureElement.appendChild(fieldElement);
                     fieldElement.setAttribute("name", field.getName());
                     fieldElement.setAttribute("type", field.getType());
-                    fieldElement.setAttribute("elementCountStructureField",
-                            field.getElementCountStructureField());
+                    if (!field.getElementCountStructureField().equals(""))
+                        fieldElement.setAttribute("elementCountStructureField",
+                                field.getElementCountStructureField());
                     fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
                 }
             }
+
+            // line breaker
+            Text lineBreak1 = (Text) doc.createTextNode("\n");
+            rootTypes.appendChild(lineBreak1);
 
             for (ArrayType arrayType : arraytype_list) {
                 Element arrayTypeElement = doc.createElement("arrayType");
                 rootTypes.appendChild(arrayTypeElement);
                 arrayTypeElement.setAttribute("name", arrayType.getName());
                 arrayTypeElement.setAttribute("elementType", arrayType.getElementType());
-                arrayTypeElement.setAttribute("constantElementCount",
-                        arrayType.getConstantElementCount());
+                if (!arrayType.getConstantElementCount().equals("")) {
+                    arrayTypeElement.setAttribute("constantElementCount",
+                            arrayType.getConstantElementCount());
+                }
+
             }
+
+            // line breaker
+            Text lineBreak2 = (Text) doc.createTextNode("\n\n");
+            root.appendChild(lineBreak2);
 
             Element messagesElement = doc.createElement("messages");
             root.appendChild(messagesElement);
@@ -319,11 +341,81 @@ public class formXML {
                     messageElement.appendChild(fieldElement);
                     fieldElement.setAttribute("name", field.getName());
                     fieldElement.setAttribute("type", field.getType());
-                    fieldElement.setAttribute("elementCountMessageField",
-                            field.getElementCountField());
+                    if (!field.getElementCountField().equals(""))
+                        fieldElement.setAttribute("elementCountMessageField",
+                                field.getElementCountField());
                     fieldElement.setAttribute("fieldIndex", field.getfIndex());
                 }
+                Text lineBreakMessages = doc.createTextNode("\n");
+                messagesElement.appendChild(lineBreakMessages);
             }
+
+            Text lineBreak3 = (Text) doc.createTextNode("\n\n");
+            root.appendChild(lineBreak3);
+
+            Element rootCodecs = doc.createElement("codecs");
+            root.appendChild(rootCodecs);
+            // line breaker
+            Text lineBreak5 = (Text) doc.createTextNode("\n\n");
+            rootCodecs.appendChild(lineBreak5);
+
+            for (Codecs codec : codec_list) {
+                Element codecElement = doc.createElement("codec");
+                rootCodecs.appendChild(codecElement);
+                codecElement.setAttribute("name", codec.getName());
+                codecElement.setAttribute("byteOrder", codec.getByteOrder());
+
+                Element headerElement = doc.createElement("header");
+                codecElement.appendChild(headerElement);
+                for (CodecFields field : codec.getCodecHeader().getHeaderFields()) {
+
+                    Element fieldElement = doc.createElement("field");
+                    headerElement.appendChild(fieldElement);
+                    fieldElement.setAttribute("name", field.getName());
+                    if (!field.getFieldProperty().equals(""))
+                        fieldElement.setAttribute("fieldProperty", field.getFieldProperty());
+                    fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
+                    fieldElement.setAttribute("type", field.getType());
+                }
+                /*
+                 * Text codecAfterHeader = doc.createTextNode("\n");
+                 * codecElement.appendChild(codecAfterHeader);
+                 */
+
+                Element footerElement = doc.createElement("footer");
+                codecElement.appendChild(footerElement);
+
+                for (CodecFields field : codec.getCodecFooter().getFooterFields()) {
+                    Element fieldElement = doc.createElement("field");
+
+                    footerElement.appendChild(fieldElement);
+                    fieldElement.setAttribute("name", field.getName());
+                    fieldElement.setAttribute("fieldProperty", field.getFieldProperty());
+                    fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
+                    fieldElement.setAttribute("type", field.getType());
+                }
+
+                Text codecAfterFooter = doc.createTextNode("\n");
+                codecElement.appendChild(codecAfterFooter);
+
+                for (CodecMessage codecMessage : codec.getCodecMessages()) {
+                    Element messageElement = doc.createElement("message");
+                    codecElement.appendChild(messageElement);
+                    messageElement.setAttribute("name", codecMessage.getName());
+
+                }
+                Text codecAfterMessages = doc.createTextNode("\n");
+                codecElement.appendChild(codecAfterMessages);
+
+                if (!(codec == codec_list.get(codec_list.size() - 1))) {
+                    Text lineBreakCodecs = doc.createTextNode("\n");
+                    rootCodecs.appendChild(lineBreakCodecs);
+                }
+            }
+
+            // line breaker
+            Text lineBreak4 = (Text) doc.createTextNode("\n\n");
+            root.appendChild(lineBreak4);
 
             // print XML to system console
             writeXml(doc, System.out);
@@ -345,7 +437,10 @@ public class formXML {
         Transformer transformer = transformerFactory.newTransformer();
 
         // pretty print
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes" );
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+        transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "");
 
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(new File("ata.xml"));

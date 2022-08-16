@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<TA>
+<TA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TA.xsd">
+    
     <types>
         <primitive byteOrder="" id="field0" name="STRUCT2" size="0" type="UINT_8"/>
         <primitive byteOrder="8" id="BNR" name="BYTE" size="0" type="byte"/>
@@ -7,67 +8,204 @@
         <primitive byteOrder="0" id="STR" name="STRING_10CHAR" size="10" type="String"/>
         <primitive byteOrder="0" id="STR" name="STRING_VARSIZE" size="1" type="String"/>
         <primitive byteOrder="8" id="CB2" name="CHAR" size="0" type="char"/>
+        
         <structure name="STRUCT1">
-            <field elementCountStructureField="" fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
             <field elementCountStructureField="field0" fieldIndex="1" name="field1" type="UINT_8_Array"/>
         </structure>
+        
         <arrayType constantElementCount="field0" elementType="13" name="Message13"/>
         <arrayType constantElementCount="2" elementType="BYTE" name="CheckSumArray"/>
-        <arrayType constantElementCount="" elementType="BYTE_CB2" name="CharArray"/>
-        <arrayType constantElementCount="" elementType="UINT_8" name="UINT_8_Array"/>
+        <arrayType elementType="BYTE_CB2" name="CharArray"/>
+        <arrayType elementType="UINT_8" name="UINT_8_Array"/>
         <arrayType constantElementCount="3" elementType="UINT_8" name="UINT_8_Array_Len3"/>
-        <arrayType constantElementCount="" elementType="STRUCT1" name="STRUCT1_Array_VarSize"/>
+        <arrayType elementType="STRUCT1" name="STRUCT1_Array_VarSize"/>
         <arrayType constantElementCount="3" elementType="STRUCT1" name="STRUCT1_Array_ConstSize3"/>
-        <arrayType constantElementCount="" elementType="CHAR" name="CharTypeArray"/>
-        <arrayType constantElementCount="" elementType="BYTE" name="PreambleNoConstSizeArray"/>
+        <arrayType elementType="CHAR" name="CharTypeArray"/>
+        <arrayType elementType="BYTE" name="PreambleNoConstSizeArray"/>
     </types>
-    <messages/>
+    
     <messages>
         <message id="1" name="Message1">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
         </message>
+        
         <message id="2" name="Message2">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="1" name="field1" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
         </message>
+        
         <message id="3" name="Message3">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="1" name="field1" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
         </message>
+        
         <message id="4" name="Message4">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="1" name="field1" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="2" name="field2" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="3" name="field3" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="3" name="field3" type="UINT_8"/>
         </message>
+        
         <message id="5" name="Message5">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="STRING_10CHAR"/>
-            <field elementCountMessageField="" fieldIndex="1" name="field1" type="STRING_10CHAR"/>
-            <field elementCountMessageField="" fieldIndex="2" name="field2" type="STRING_10CHAR"/>
-            <field elementCountMessageField="" fieldIndex="3" name="field3" type="STRING_10CHAR"/>
+            <field fieldIndex="0" name="field0" type="STRING_10CHAR"/>
+            <field fieldIndex="1" name="field1" type="STRING_10CHAR"/>
+            <field fieldIndex="2" name="field2" type="STRING_10CHAR"/>
+            <field fieldIndex="3" name="field3" type="STRING_10CHAR"/>
         </message>
+        
         <message id="6" name="Message6">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
             <field elementCountMessageField="field0" fieldIndex="1" name="field1" type="CharArray"/>
         </message>
+        
         <message id="7" name="Message7">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
             <field elementCountMessageField="field0" fieldIndex="1" name="field1" type="STRUCT1_Array_VarSize"/>
         </message>
+        
         <message id="8" name="Message8">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountMessageField="" fieldIndex="1" name="field1" type="STRUCT1_Array_ConstSize3"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="STRUCT1_Array_ConstSize3"/>
         </message>
+        
         <message id="9" name="Message9">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8_Array"/>
+            <field fieldIndex="0" name="field0" type="UINT_8_Array"/>
         </message>
+        
         <message id="10" name="Message10">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
         </message>
+        
         <message id="12" name="Message12">
-            <field elementCountMessageField="" fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
         </message>
+        
     </messages>
+    
+    <codecs>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            <message name="Message2"/>
+            <message name="Message3"/>
+            <message name="Message4"/>
+            <message name="Message5"/>
+            <message name="Message6"/>
+            <message name="Message7"/>
+            <message name="Message8"/>
+            <message name="Message9"/>
+            <message name="Message13"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PrePost_BigEnd">
+            <header>
+                <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
+                <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
+            </header>
+            <footer>
+                <field fieldIndex="" fieldProperty="" name="msgPostamble" type="PrePostAmbleArray"/>
+            </footer>
+            
+            <message name="Message1"/>
+            <message name="Message2"/>
+            <message name="Message3"/>
+            <message name="Message4"/>
+            <message name="Message5"/>
+            <message name="Message6"/>
+            <message name="Message7"/>
+            <message name="Message8"/>
+            <message name="Message9"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd_Checksum">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+            </header>
+            <footer>
+                <field fieldIndex="" fieldProperty="" name="msgChecksum" type="CheckSumArray"/>
+            </footer>
+            
+            <message name="Message1"/>
+            <message name="Message2"/>
+            <message name="Message3"/>
+            <message name="Message4"/>
+            <message name="Message5"/>
+            <message name="Message6"/>
+            <message name="Message7"/>
+            <message name="Message8"/>
+            <message name="Message9"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_Id_BigEnd_Checksum">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" name="msgHeaderField0" type="UINT_8"/>
+            </header>
+            <footer>
+                <field fieldIndex="" fieldProperty="" name="msgChecksum" type="CheckSumArray"/>
+            </footer>
+            
+            <message name="Message1"/>
+            <message name="Message2"/>
+            <message name="Message3"/>
+            <message name="Message4"/>
+            <message name="Message5"/>
+            <message name="Message6"/>
+            <message name="Message7"/>
+            <message name="Message8"/>
+            <message name="Message9"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd_CalculatedSize">
+            <header>
+                <field fieldIndex="0" name="field0" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="CalculatedSize" name="length" type="UINT_8"/>
+                <field fieldIndex="2" name="field2" type="UINT_8"/>
+                <field fieldIndex="3" fieldProperty="Id" name="msgId" type="UINT_8"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLenPayload_BigEnd">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="UINT_8"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            <message name="Message11"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd_HeaderArray">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+                <field fieldIndex="2" name="fieldHeaderArr" type="UINT_8_Array_Len3"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            
+        </codec>
+    </codecs>
+    
 </TA>
