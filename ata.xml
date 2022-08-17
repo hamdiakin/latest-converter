@@ -2,19 +2,14 @@
 <TA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TA.xsd">
     
     <types>
-        <primitive byteOrder="" id="field0" name="STRUCT2" size="0" type="UINT_8"/>
+        <primitive byteOrder="8" id="CB2" name="BYTE_CB2" size="0" type="byte"/>
         <primitive byteOrder="8" id="BNR" name="BYTE" size="0" type="byte"/>
         <primitive byteOrder="8" id="BNR" name="UINT_8" size="0" type="int"/>
         <primitive byteOrder="0" id="STR" name="STRING_10CHAR" size="10" type="String"/>
         <primitive byteOrder="0" id="STR" name="STRING_VARSIZE" size="1" type="String"/>
         <primitive byteOrder="8" id="CB2" name="CHAR" size="0" type="char"/>
         
-        <structure name="STRUCT1">
-            <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountStructureField="field0" fieldIndex="1" name="field1" type="UINT_8_Array"/>
-        </structure>
-        
-        <arrayType constantElementCount="field0" elementType="13" name="Message13"/>
+        <arrayType constantElementCount="1" elementType="BYTE" name="PrePostAmbleArray"/>
         <arrayType constantElementCount="2" elementType="BYTE" name="CheckSumArray"/>
         <arrayType elementType="BYTE_CB2" name="CharArray"/>
         <arrayType elementType="UINT_8" name="UINT_8_Array"/>
@@ -23,6 +18,7 @@
         <arrayType constantElementCount="3" elementType="STRUCT1" name="STRUCT1_Array_ConstSize3"/>
         <arrayType elementType="CHAR" name="CharTypeArray"/>
         <arrayType elementType="BYTE" name="PreambleNoConstSizeArray"/>
+        <arrayType constantElementCount="3" elementType="BYTE" name="Deneme"/>
     </types>
     
     <messages>
@@ -87,26 +83,6 @@
     
     <codecs>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd">
-            <header>
-                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
-                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
-            </header>
-            <footer/>
-            
-            <message name="Message1"/>
-            <message name="Message2"/>
-            <message name="Message3"/>
-            <message name="Message4"/>
-            <message name="Message5"/>
-            <message name="Message6"/>
-            <message name="Message7"/>
-            <message name="Message8"/>
-            <message name="Message9"/>
-            <message name="Message13"/>
-            
-        </codec>
-        
         <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PrePost_BigEnd">
             <header>
                 <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
@@ -114,6 +90,7 @@
             </header>
             <footer>
                 <field fieldIndex="" fieldProperty="" name="msgPostamble" type="PrePostAmbleArray"/>
+                <field fieldIndex="" fieldProperty="PrePostAmbleArray" name="msgPostamble" type=""/>
             </footer>
             
             <message name="Message1"/>

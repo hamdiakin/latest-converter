@@ -13,8 +13,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Element;
-
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -83,7 +89,7 @@ public class basicIdea {
                         }
                     }
 
-                    //TODO: for structures, complicated need to solve this
+                    // TODO: for structures, complicated need to solve this
 
                     NodeList structures = type.getElementsByTagName("structure");
                     ArrayList<StructureFields> structureField_list = new ArrayList<StructureFields>();
@@ -290,10 +296,20 @@ public class basicIdea {
                 }
             }
 
-            // exporting into excel fil
+            // cell style for bold text
+            CellStyle style = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            style.setFont(font);
+
+            // exporting into excel file
+            String primitiveHeader[] = { "Name", "Format", "Type", "SizeInBytes", "SizeInBits" };
 
             XSSFSheet primitives_sheet = workbook.createSheet("primitives");
             int rowNum = 0;
+            rowNum = setHeaderRow(primitives_sheet, rowNum, primitiveHeader, workbook, style);
+
+            // TODO: set out the text style of the header row
 
             for (int i = 0; i < primitive_list.size(); i++) {
                 Row row = primitives_sheet.createRow(rowNum++);
@@ -305,12 +321,14 @@ public class basicIdea {
 
             }
 
+            String structureHeader[] = { "Name", "FieldName", "FieldType", "FieldIndex", "ElementCountStructureField" };
             XSSFSheet structures_sheet = workbook.createSheet("structures");
             rowNum = 0;
-/* 
-            for(Structures structure :structure_list)
-            
- */
+            rowNum = setHeaderRow(structures_sheet, rowNum, structureHeader, workbook, style);
+            /*
+             * for(Structures structure :structure_list)
+             *
+             */
 
             for (int i = 0; i < structure_list.size(); i++) {
                 for (int j = 0; j < structure_list.get(i).getStructurefields().size(); j++) {
@@ -319,12 +337,16 @@ public class basicIdea {
                     row.createCell(1).setCellValue(structure_list.get(i).getStructurefields().get(j).getName());
                     row.createCell(2).setCellValue(structure_list.get(i).getStructurefields().get(j).getType());
                     row.createCell(3).setCellValue(structure_list.get(i).getStructurefields().get(j).getFieldIndex());
-                    row.createCell(4).setCellValue(structure_list.get(i).getStructurefields().get(j).getElementCountStructureField());
+                    row.createCell(4).setCellValue(
+                            structure_list.get(i).getStructurefields().get(j).getElementCountStructureField());
                 }
             }
 
+            String arrayHeader[] = { "Name", "ElementType", "ElementCountStructureField" };
             XSSFSheet arrays_sheet = workbook.createSheet("arrays");
             rowNum = 0;
+
+            rowNum = setHeaderRow(arrays_sheet, rowNum, arrayHeader, workbook, style);
 
             for (int i = 0; i < arrays_list.size(); i++) {
                 Row row = arrays_sheet.createRow(rowNum++);
@@ -333,8 +355,11 @@ public class basicIdea {
                 row.createCell(2).setCellValue(arrays_list.get(i).getConstantElementCount());
             }
 
+            String messagesHeader[] = { "Name", "ID", "FieldName", "FieldIndex", "FieldType", "ElementCountField" };
             XSSFSheet messages_sheet = workbook.createSheet("messages");
             rowNum = 0;
+
+            rowNum = setHeaderRow(messages_sheet, rowNum, messagesHeader, workbook, style);
 
             for (int i = 0; i < message_list.size(); i++) {
                 for (int j = 0; j < message_list.get(i).getMessageFields().size(); j++) {
@@ -344,14 +369,19 @@ public class basicIdea {
                     row.createCell(2).setCellValue(message_list.get(i).getMessageFields().get(j).getName());
                     row.createCell(3).setCellValue(message_list.get(i).getMessageFields().get(j).getfIndex());
                     row.createCell(4).setCellValue(message_list.get(i).getMessageFields().get(j).getType());
-                    row.createCell(5).setCellValue(message_list.get(i).getMessageFields().get(j).getElementCountField());
+                    row.createCell(5)
+                            .setCellValue(message_list.get(i).getMessageFields().get(j).getElementCountField());
                 }
             }
 
+            String codecsHeader[] = { "Name", "ByteOrder", "CodecPart", "FieldName", "FieldProperty", "FieldIndex",
+                    "FieldType" };
             XSSFSheet codecs_sheet = workbook.createSheet("codecs");
             int codecRowNum = 0;
+            codecRowNum = setHeaderRow(codecs_sheet, codecRowNum, codecsHeader, workbook, style);
             int counter = 0;
             for (int i = 0; i < codec_list.size(); i++) {
+
                 // HEADER FIELDS
                 for (int j = 0; j < codec_list.get(i).getCodecHeader().getHeaderFields().size(); j++) {
                     counter = 0;
@@ -403,6 +433,38 @@ public class basicIdea {
 
             }
 
+            // TODO: set autosized columns
+            int sheetNum = workbook.getNumberOfSheets();
+            for (int i = 0; i < sheetNum; i++) {
+                setAutoSizedColumns(workbook.getSheetAt(i));
+            }
+
+            // data validation and dropdown list
+
+            ArrayList<String> dataTypes = new ArrayList<String>();
+            for(Primitives primitive: primitive_list){
+                dataTypes.add(primitive.getName());
+            }
+
+            for(ArrayType array: arrays_list){
+                dataTypes.add(array.getName());
+            }
+
+            String[] dataTypesArray = dataTypes.toArray(new String[0]);
+
+            DataValidation dataValidation = null;
+            DataValidationConstraint constraint = null;
+            DataValidationHelper validationHelper = null;
+
+            XSSFSheet sheet = (XSSFSheet) workbook.createSheet("sheet");
+
+            validationHelper = new XSSFDataValidationHelper(codecs_sheet);
+            CellRangeAddressList addressList = new CellRangeAddressList(1, 67, 6, 6);
+            constraint = validationHelper.createExplicitListConstraint(dataTypesArray);
+            dataValidation = validationHelper.createValidation(constraint, addressList);
+            dataValidation.setSuppressDropDownArrow(true);
+            sheet.addValidationData(dataValidation);
+
             try {
                 FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
                 workbook.write(outputStream);
@@ -423,6 +485,26 @@ public class basicIdea {
             e.printStackTrace();
         }
 
+    }
+
+    public static void setAutoSizedColumns(XSSFSheet sheet) {
+        Row headerRow = sheet.getRow(0);
+        for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+            sheet.autoSizeColumn(i);
+        }
+    }
+
+    // set header row per sheet
+    public static int setHeaderRow(XSSFSheet sheet, int rowNum, String[] header, XSSFWorkbook workbook,
+            CellStyle style) {
+
+        Row row = sheet.createRow(rowNum);
+        for (int i = 0; i < header.length; i++) {
+            row.createCell(i).setCellValue(header[i]);
+            row.getCell(i).setCellStyle(style);
+        }
+        rowNum += 1;
+        return rowNum;
     }
 
 }

@@ -66,7 +66,6 @@ public class formXML {
                 counter = 0;
                 while (cellIterator.hasNext()) {
                     Cell currentCell = cellIterator.next();
-                    // System.out.print(currentCell.getStringCellValue() + "--");
                     counter++;
                     lineInfo[counter] = currentCell.getStringCellValue();
                 }
@@ -102,10 +101,7 @@ public class formXML {
 
                         if (line[3].equals("HEADER")) {
                             headerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
-                        }
-                        // TODO: code is never getting into this field
-                        // thus no footer element has been added
-                        else if (line[3].equals("FOOTER")) {
+                        } else if (line[3].equals("FOOTER")) {
                             footerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
                         } else if (line[3].equals("MESSAGES")) {
                             codecMessages.add(new CodecMessage(line[4]));
@@ -133,7 +129,6 @@ public class formXML {
 
             // all the part below belongs to message type part
             contdPart = true;
-            int sheetNumber = 3;
             counter = 0;
             String previousIdentifier = "";
             String currentIdentifier = "";
@@ -145,16 +140,21 @@ public class formXML {
 
             ArrayList<Structures> structure_list = new ArrayList<Structures>();
             ArrayList<StructureFields> structure_fields = new ArrayList<StructureFields>();
-
             ArrayList<Primitives> primitive_list = new ArrayList<Primitives>();
 
-            // TODO: Can be redefined for every type
             name = "";
             String messageID = "";
 
-            while (sheetNumber >= 0) {
+            int wbSheetNumber = workbook.getNumberOfSheets();
+            String sheetNames[] = new String[wbSheetNumber];
+
+            for (int i = 0; i < wbSheetNumber; i++) {
+                sheetNames[i] = workbook.getSheetName(i);
+            }
+
+            for (String sheetName : sheetNames) {
                 // dont touch above
-                datatypeSheet = workbook.getSheetAt(sheetNumber);
+                datatypeSheet = workbook.getSheet(sheetName);
                 iterator = datatypeSheet.iterator();
                 while (iterator.hasNext()) {
                     Row currentRow = iterator.next();
@@ -171,8 +171,8 @@ public class formXML {
                     Arrays.fill(lineInfo, "");
                     // System.out.println();
 
-                    switch (sheetNumber) {
-                        case 3:
+                    switch (sheetName) {
+                        case "messages":
                             if (message_info.size() > 1) {
                                 previousIdentifier = message_info.get(message_info.size() - 2)[1];
                                 currentIdentifier = message_info.get(message_info.size() - 1)[1];
@@ -207,12 +207,12 @@ public class formXML {
                             }
 
                             break;
-                        case 2:
+                        case "arrays":
                             arraytype_list.add(new ArrayType(message_info.get(0)[1], message_info.get(0)[2],
                                     message_info.get(0)[3]));
                             message_info.clear();
                             break;
-                        case 1:
+                        case "structures":
                             if (message_info.size() > 1) {
                                 previousIdentifier = message_info.get(message_info.size() - 2)[1];
                                 currentIdentifier = message_info.get(message_info.size() - 1)[1];
@@ -242,7 +242,7 @@ public class formXML {
 
                             break;
 
-                        case 0:
+                        case "primitives":
                             primitive_list.add(
                                     new Primitives(message_info.get(0)[1], message_info.get(0)[2],
                                             message_info.get(0)[3], message_info.get(0)[4], message_info.get(0)[5]));
@@ -253,9 +253,17 @@ public class formXML {
                 }
 
                 // dont touch below
-                sheetNumber--;
             }
+
+            // Header info must be removed from all of the lists
+            primitive_list.remove(0);
+            message_list.remove(0);
+            structure_list.remove(0);
+            arraytype_list.remove(0);
+            codec_list.remove(0);
+
             workbook.close();
+
             System.out.println("Done");
 
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -273,7 +281,6 @@ public class formXML {
             root.appendChild(lineBreak6);
 
             root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-
             root.setAttribute("xsi:noNamespaceSchemaLocation", "TA.xsd");
 
             Element rootTypes = doc.createElement("types");

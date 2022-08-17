@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="xml2xlsx" />
+        <module name="latest-converter" />
       </profile>
     </annotationProcessing>
   </component>
