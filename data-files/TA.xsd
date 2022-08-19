@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:simpleType name="XsdPositiveInteger">
+
+        <xsd:restriction base="xsd:integer">
+
+            <xsd:minInclusive value="1"/>
+
+            <xsd:maxInclusive value="1073741823"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdNonNegativeInteger">
+
+        <xsd:restriction base="xsd:integer">
+
+            <xsd:minInclusive value="0"/>
+
+            <xsd:maxInclusive value="1073741823"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdIntegerBufferCapacity">
+
+        <xsd:restriction base="xsd:integer">
+
+            <xsd:minInclusive value="0"/>
+
+            <xsd:maxInclusive value="20000000"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdHost">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:pattern value="([0-9]*[0-9.])*"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdClassName">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:pattern value="([a-zA-Z]([a-zA-Z0-9_]*))"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdAttributeName">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:pattern value="([a-zA-Z_]([a-zA-Z0-9_]*))"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdPackageName">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:pattern value="([a-zA-Z]*([a-zA-Z0-9._]*))*"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdFormat">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:enumeration value="CB2"/>
+
+            <xsd:enumeration value="BNR"/>
+
+            <xsd:enumeration value="BNR_S"/>
+
+            <xsd:enumeration value="BCD"/>
+
+            <xsd:enumeration value="BCD_S"/>
+
+            <xsd:enumeration value="STR"/>
+
+            <xsd:enumeration value="IEEEFloat"/>
+
+            <xsd:enumeration value="IEEEDouble"/>
+
+            <xsd:enumeration value="CUSTOM"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdBitIndex">
+
+        <xsd:restriction base="xsd:integer">
+
+            <xsd:minInclusive value="0"/>
+
+            <xsd:maxInclusive value="7"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ********************************TA CONFIGURATION*********************************** -->
+    <xsd:element name="TA" type="XsdTa">
+    </xsd:element>
+
+    <xsd:complexType name="XsdTa">
+
+        <xsd:sequence>
+            <xsd:element name="types" type="XsdTypes"/>
+            <xsd:element name="messages" type="XsdMessages"/>
+            <xsd:element name="codecs" type="XsdCodecs"/>
+        </xsd:sequence>
+
+        <xsd:attribute name="rootPackagePrefix" type="XsdPackageName"
+                       use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdMessages">
+        <xsd:sequence>
+            <xsd:element name="message" minOccurs="0" maxOccurs="unbounded"
+                         type="XsdMessage"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdCodecs">
+        <xsd:sequence>
+            <xsd:element name="codec" maxOccurs="unbounded" type="XsdCodec"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <!-- ********************************TYPE DEFINITIONS******************************** -->
+
+    <xsd:complexType name="XsdTypes">
+        <xsd:sequence>
+            <xsd:element name="primitive" maxOccurs="unbounded"
+                         minOccurs="0" type="XsdPrimitive"/>
+            <xsd:element name="enum" maxOccurs="unbounded" minOccurs="0"
+                         type="XsdEnum"/>
+            <xsd:element name="structure" maxOccurs="unbounded"
+                         minOccurs="0" type="XsdStructure"/>
+            <xsd:element name="array" maxOccurs="unbounded"
+                         minOccurs="0" type="XsdArray"/>
+            <xsd:element name="list" maxOccurs="unbounded"
+                         minOccurs="0" type="XsdList"/>
+            <xsd:element name="union" maxOccurs="unbounded"
+                         minOccurs="0" type="XsdUnion"/>
+            <xsd:element name="compound" maxOccurs="unbounded" minOccurs="0" type="XsdCompound"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="XsdPrimitiveType">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:enumeration value="boolean"/>
+
+            <xsd:enumeration value="char"/>
+
+            <xsd:enumeration value="byte"/>
+
+            <xsd:enumeration value="short"/>
+
+            <xsd:enumeration value="int"/>
+
+            <xsd:enumeration value="long"/>
+
+            <xsd:enumeration value="float"/>
+
+            <xsd:enumeration value="double"/>
+
+            <xsd:enumeration value="String"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdTypeEnum">
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:enumeration value="PRIMITIVE"/>
+
+            <xsd:enumeration value="ENUM"/>
+
+            <xsd:enumeration value="STRUCTURE"/>
+
+            <xsd:enumeration value="ARRAY"/>
+
+            <xsd:enumeration value="LIST"/>
+
+            <xsd:enumeration value="UNION"/>
+
+            <xsd:enumeration value="COMPOUND"/>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="XsdType">
+        <xsd:sequence>
+            <xsd:element name="typeEnum" minOccurs="0" type="XsdTypeEnum"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdPrimitive">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:attribute name="name" type="xsd:string" use="required"/>
+
+                <xsd:attribute name="type" type="XsdPrimitiveType" use="required"/>
+
+                <xsd:attribute name="format" type="XsdFormat" use="required"/>
+
+                <xsd:attribute name="sizeInBytes" type="XsdNonNegativeInteger" use="required"/>
+
+                <xsd:attribute name="sizeInBits" type="XsdNonNegativeInteger" use="required"/>
+
+                <xsd:attribute name="min" type="xsd:anySimpleType" use="optional"/>
+
+                <xsd:attribute name="max" type="xsd:anySimpleType" use="optional"/>
+
+                <xsd:attribute name="resolution" type="XsdResolution" default="1.0" use="optional"/>
+
+                <xsd:attribute name="translatorClass" type="xsd:string" use="optional"/>
+
+                <xsd:attribute name="boundCheck" type="xsd:boolean" default="true"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdEnum">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:sequence maxOccurs="unbounded" minOccurs="1">
+
+                    <xsd:element name="enumVariable" type="XsdEnumVariable"/>
+                </xsd:sequence>
+
+                <xsd:attribute name="name" type="XsdClassName" use="required"/>
+
+                <xsd:attribute name="format" type="XsdFormat" use="required"/>
+
+                <xsd:attribute name="sizeInBytes" type="XsdNonNegativeInteger"
+                               use="required"/>
+
+                <xsd:attribute name="sizeInBits" type="XsdNonNegativeInteger"
+                               use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdEnumVariable">
+
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+
+        <xsd:attribute name="value" type="xsd:int" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdStructure">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:sequence>
+
+                    <xsd:element name="field" maxOccurs="unbounded"
+                                 minOccurs="1" type="XsdField"/>
+                </xsd:sequence>
+
+                <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdArray">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+
+                <xsd:attribute name="elementType" type="xsd:string" use="required"/>
+
+                <xsd:attribute name="constantElementCount" type="XsdNonNegativeInteger" use="optional" default="0"/>
+
+                <xsd:attribute name="delimiter" type="xsd:string" use="optional" default="null"/>
+
+                <xsd:attribute name="UseExtensionIndicator" type="xsd:boolean" use="optional" default="false"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdList">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+
+                <xsd:attribute name="elementType" type="xsd:string" use="required"/>
+
+                <xsd:attribute name="constantElementCount" type="XsdNonNegativeInteger" use="optional" default="0"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdUnion">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:sequence>
+                    <xsd:element name="field" maxOccurs="unbounded"
+                                 minOccurs="1" type="XsdUnionField"/>
+                </xsd:sequence>
+
+                <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+                <xsd:attribute name="discriminantType" type="XsdAttributeName"
+                               use="required"/>
+                <xsd:attribute name="maxLengthHolder" type="xsd:boolean"
+                               use="optional" default="true"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdUnionField">
+        <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+        <xsd:attribute name="type" type="xsd:string" use="required"/>
+        <xsd:attribute name="discriminantValue" type="xsd:string"
+                       use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdCompound">
+        <xsd:complexContent>
+            <xsd:extension base="XsdType">
+                <xsd:sequence minOccurs="1" maxOccurs="1">
+                    <xsd:element name="lookUp" type="XsdCompoundLookUp" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="fields" type="XsdCompoundFields" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+
+                <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdCompoundLookUp">
+
+        <xsd:sequence>
+            <xsd:element name="field" maxOccurs="unbounded" minOccurs="1" type="XsdField"/>
+        </xsd:sequence>
+
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdCompoundFields">
+
+        <xsd:sequence>
+            <xsd:element name="field" maxOccurs="unbounded" minOccurs="1" type="XsdField"/>
+        </xsd:sequence>
+
+    </xsd:complexType>
+    <!-- ********************************CODEC CONFIGURATION******************************** -->
+
+    <xsd:complexType name="XsdCodec">
+        <xsd:sequence>
+            <xsd:element name="header" type="XsdHeader"/>
+            <xsd:element name="footer" type="XsdFooter"/>
+            <xsd:element name="message" maxOccurs="unbounded" minOccurs="0" type="XsdCodecMessage"/>
+        </xsd:sequence>
+
+        <xsd:attribute name="name" type="XsdClassName" use="required"/>
+
+        <xsd:attribute name="byteOrder" type="XsdByteOrder" default="BIG_ENDIAN"/>
+
+        <xsd:attribute name="inputBufferCapacity" type="XsdIntegerBufferCapacity" default="500000"/>
+
+        <xsd:attribute name="outputBufferCapacity" type="XsdIntegerBufferCapacity" default="500000"/>
+
+    </xsd:complexType>
+
+    <xsd:simpleType name="XsdByteOrder">
+        <xsd:restriction base="xsd:string">
+
+            <xsd:enumeration value="BIG_ENDIAN"/>
+
+            <xsd:enumeration value="LITTLE_ENDIAN"/>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdResolution">
+        <xsd:restriction base="xsd:double">
+            <xsd:minInclusive value="0.0"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="XsdCodecMessage">
+        <xsd:attribute name="name" type="XsdClassName" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdHeader">
+        <xsd:sequence>
+            <xsd:element name="field" maxOccurs="unbounded" minOccurs="0" type="XsdField"/>
+        </xsd:sequence>
+
+        <xsd:attribute name="imports" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="XsdFooter">
+        <xsd:sequence>
+            <xsd:element name="field" maxOccurs="unbounded"
+                         minOccurs="0" type="XsdField"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- ********************************MESSAGE CONFIGURATION******************************** -->
+
+    <xsd:complexType name="XsdMessage">
+        <xsd:sequence>
+            <xsd:element name="field" maxOccurs="unbounded" minOccurs="0" type="XsdField"/>
+        </xsd:sequence>
+
+        <xsd:attribute name="id" type="xsd:int" use="required"/>
+        <xsd:attribute name="name" type="XsdClassName" use="required"/>
+        <xsd:attribute name="imports" type="xsd:string" use="optional"/>
+
+    </xsd:complexType>
+
+
+    <xsd:simpleType name="XsdFieldProperty"> <!-- Keep synchronized with "FieldPropertyEnum.java"! -->
+
+        <xsd:restriction base="xsd:string">
+
+            <xsd:enumeration value="None"/>
+
+            <xsd:enumeration value="Preamble"/>
+
+            <xsd:enumeration value="Id"/>
+
+            <xsd:enumeration value="PayloadSize"/>
+
+            <xsd:enumeration value="TotalSize"/>
+
+            <xsd:enumeration value="CalculatedSize"/>
+
+            <xsd:enumeration value="Postamble"/>
+
+            <xsd:enumeration value="Delimiter"/>
+
+            <xsd:enumeration value="Checksum"/>
+
+            <xsd:enumeration value="Extension"/>
+
+            <xsd:enumeration value="PresenceIndicator"/>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XsdSizeUnit">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="BYTE"/>
+            <xsd:enumeration value="WORD"/>
+            <xsd:enumeration value="DWORD"/>
+            <xsd:enumeration value="QWORD"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="XsdField">
+
+        <xsd:attribute name="name" type="XsdAttributeName" use="required"/>
+
+        <xsd:attribute name="type" type="xsd:string" use="required"/>
+
+        <xsd:attribute name="defaultValue" type="xsd:string" default="" use="optional"/>
+
+        <xsd:attribute name="optional" default="false" type="xsd:boolean" use="optional"/>
+        <!-- Default elementCount=0 means array is variable length -->
+
+        <xsd:attribute name="constantElementCount" default="0" type="XsdNonNegativeInteger" use="optional"/>
+
+        <xsd:attribute name="delimiter" default="null" type="xsd:string" use="optional"/>
+
+        <xsd:attribute name="discriminantField" default="_" type="xsd:string" use="optional"/>
+
+        <xsd:attribute name="elementCountField" default="-1" type="xsd:string" use="optional"/>
+
+        <xsd:attribute name="fieldProperty" type="XsdFieldProperty" use="optional" default="None"/>
+
+        <xsd:attribute name="sizeUnit" type="XsdSizeUnit" use="optional" default="BYTE"/>
+
+        <xsd:attribute name="fieldIndex" type="XsdNonNegativeInteger" use="required"/>
+
+        <xsd:attribute name="lookUpField" type="xsd:string" use="optional"/>
+
+        <xsd:attribute name="annotations" type="xsd:string" use="optional"/>
+
+        <xsd:attribute name="parameterName" type="xsd:string" use="optional"/>
+
+        <xsd:attribute name="elementCountParameter" type="xsd:string" use="optional"/>
+
+        <!-- if fieldProperty == CalculatedSize one of this attributes is required.-->
+        <xsd:attributeGroup ref="CalculatedSizeAttributes"/>
+
+    </xsd:complexType>
+
+    <xsd:attributeGroup name="CalculatedSizeAttributes">
+        <xsd:attribute name="calculatedSizeFormula" type="xsd:string" use="optional"/>
+        <xsd:attribute name="payloadSizeFormula" type="xsd:string" use="optional"/>
+    </xsd:attributeGroup>
+
+</xsd:schema>
