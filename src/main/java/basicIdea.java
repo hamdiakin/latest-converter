@@ -3,6 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.jar.Attributes.Name;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +15,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import structuralClasses.*;
+
 import org.w3c.dom.Element;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -19,6 +25,7 @@ import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -37,6 +44,12 @@ public class basicIdea {
 
         File xmlFile = new File(input_path);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        // Validations
+        Set<String> codecFieldType = new LinkedHashSet<>();
+        Set<String> messageNames = new LinkedHashSet<>();
+        Set<String> arrayTypes = new LinkedHashSet<>();
+        Set<String> structTypes = new LinkedHashSet<>();
 
         // Excel Sheet
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -61,8 +74,8 @@ public class basicIdea {
                             Element field = (Element) q;
                             primitive_list.add(new Primitives(field.getAttribute("name"),
                                     field.getAttribute("format"),
-                                    field.getAttribute("sizeInBytes"),
-                                    field.getAttribute("sizeInBits"),
+                                    Integer.parseInt(field.getAttribute("sizeInBytes")),
+                                    Integer.parseInt(field.getAttribute("sizeInBits")),
                                     field.getAttribute("type")));
 
                             // System.out.println(field.getAttribute("name"));
@@ -75,10 +88,11 @@ public class basicIdea {
                         Node q = arrays.item(j);
                         if (q.getNodeType() == Node.ELEMENT_NODE) {
                             Element field = (Element) q;
+                            // TODO: constantElementCount is initialized as 0, but it should be empty 
                             if (field.getAttribute("constantElementCount").length() > 0) {
                                 arrays_list.add(new ArrayType(field.getAttribute("name"),
                                         field.getAttribute("elementType"),
-                                        field.getAttribute("constantElementCount")));
+                                        Integer.parseInt(field.getAttribute("constantElementCount"))));
                             } else {
                                 arrays_list.add(new ArrayType(field.getAttribute("name"),
                                         field.getAttribute("elementType")));
@@ -108,11 +122,12 @@ public class basicIdea {
                                     if (sFields.getAttribute("elementCountField").length() > 0) {
                                         structureField_list.add(new StructureFields(sFields.getAttribute("name"),
                                                 sFields.getAttribute("type"),
-                                                sFields.getAttribute("fieldIndex"),
+                                                Integer.parseInt(sFields.getAttribute("fieldIndex")),
                                                 sFields.getAttribute("elementCountField")));
                                     } else {
                                         structureField_list.add(new StructureFields(sFields.getAttribute("name"),
-                                                sFields.getAttribute("type"), sFields.getAttribute("fieldIndex")));
+                                                sFields.getAttribute("type"),
+                                                Integer.parseInt(sFields.getAttribute("fieldIndex"))));
                                     }
                                 }
                             }
@@ -153,12 +168,12 @@ public class basicIdea {
                                     Element messageFields = (Element) r;
                                     if (messageFields.getAttribute("elementCountField").length() > 0) {
                                         message_field_list.add(new MessageFields(messageFields.getAttribute("name"),
-                                                messageFields.getAttribute("fieldIndex"),
+                                                Integer.parseInt(messageFields.getAttribute("fieldIndex")),
                                                 messageFields.getAttribute("type"),
                                                 messageFields.getAttribute("elementCountField")));
                                     } else {
                                         message_field_list.add(new MessageFields(messageFields.getAttribute("name"),
-                                                messageFields.getAttribute("fieldIndex"),
+                                                Integer.parseInt(messageFields.getAttribute("fieldIndex")),
                                                 messageFields.getAttribute("type")));
                                     }
 
@@ -166,7 +181,8 @@ public class basicIdea {
                             }
                         }
                         // TODO: message list is ignoring message eleven cuz it doesnt have any fields
-                        message_list.add(new Messages(messageName, messageID, new ArrayList<>(message_field_list)));
+                        message_list.add(new Messages(messageName, Integer.parseInt(messageID),
+                                new ArrayList<>(message_field_list)));
                         message_field_list.clear();
                     }
                 }
@@ -238,7 +254,8 @@ public class basicIdea {
                                             fieldIndex = codecFieldss.getAttribute("fieldIndex");
                                             type = codecFieldss.getAttribute("type");
                                             headerFields
-                                                    .add(new CodecFields(fieldName, fieldProperty, fieldIndex, type));
+                                                    .add(new CodecFields(fieldName, fieldProperty,
+                                                            Integer.parseInt(fieldIndex), type));
                                         }
 
                                     }
@@ -258,11 +275,13 @@ public class basicIdea {
                                             Element codecFieldss = (Element) z;
                                             // System.out.println(codecFieldss.getAttribute("name"));
                                             fieldName = codecFieldss.getAttribute("name");
-                                            fieldProperty = codecFieldss.getAttribute("property");
-                                            fieldIndex = codecFieldss.getAttribute("index");
+                                            fieldProperty = codecFieldss.getAttribute("fieldProperty");
+                                            fieldIndex = codecFieldss.getAttribute("fieldIndex");
                                             type = codecFieldss.getAttribute("type");
                                             footerFields
-                                                    .add(new CodecFields(fieldName, fieldProperty, fieldIndex, type));
+                                                    .add(new CodecFields(fieldName, fieldProperty,
+                                                            Integer.parseInt(fieldIndex),
+                                                            type));
                                         }
 
                                     }
@@ -312,10 +331,13 @@ public class basicIdea {
                 row.createCell(2).setCellValue(primitive_list.get(i).getType());
                 row.createCell(3).setCellValue(primitive_list.get(i).getSizeInBytes());
                 row.createCell(4).setCellValue(primitive_list.get(i).getSizeInBits());
+                codecFieldType.add(primitive_list.get(i).getName());
+                arrayTypes.add(primitive_list.get(i).getName());
+                structTypes.add(primitive_list.get(i).getName());
 
             }
 
-            String structureHeader[] = { "Name", "FieldName", "FieldType", "FieldIndex", "ElementCountStructureField" };
+            String structureHeader[] = { "Name", "FieldName", "FieldType", "FieldIndex", "ElementCountField" };
             XSSFSheet structures_sheet = workbook.createSheet("structures");
             rowNum = 0;
             rowNum = setHeaderRow(structures_sheet, rowNum, structureHeader, workbook, style);
@@ -333,10 +355,12 @@ public class basicIdea {
                     row.createCell(3).setCellValue(structure_list.get(i).getStructurefields().get(j).getFieldIndex());
                     row.createCell(4).setCellValue(
                             structure_list.get(i).getStructurefields().get(j).getElementCountStructureField());
+                    codecFieldType.add(structure_list.get(i).getName());
+                    arrayTypes.add(structure_list.get(i).getName());
                 }
             }
 
-            String arrayHeader[] = { "Name", "ElementType", "ElementCountStructureField" };
+            String arrayHeader[] = { "Name", "ElementType", "ConstantElementCount" };
             XSSFSheet arrays_sheet = workbook.createSheet("arrays");
             rowNum = 0;
 
@@ -347,6 +371,8 @@ public class basicIdea {
                 row.createCell(0).setCellValue(arrays_list.get(i).getName());
                 row.createCell(1).setCellValue(arrays_list.get(i).getElementType());
                 row.createCell(2).setCellValue(arrays_list.get(i).getConstantElementCount());
+                codecFieldType.add(arrays_list.get(i).getName());
+                structTypes.add(arrays_list.get(i).getName());
             }
 
             String messagesHeader[] = { "Name", "ID", "FieldName", "FieldIndex", "FieldType", "ElementCountField" };
@@ -365,6 +391,7 @@ public class basicIdea {
                     row.createCell(4).setCellValue(message_list.get(i).getMessageFields().get(j).getType());
                     row.createCell(5)
                             .setCellValue(message_list.get(i).getMessageFields().get(j).getElementCountField());
+                    messageNames.add(message_list.get(i).getName());
                 }
             }
 
@@ -451,16 +478,41 @@ public class basicIdea {
                 dataTypes.add(array.getName());
             }
 
-            String[] dataTypesArray = dataTypes.toArray(new String[0]);
+            //String[] dataTypesArray = dataTypes.toArray(new String[0]);
 
             // CellRangeAddressList addressList = new CellRangeAddressList(1, 67, 6, 6);
             // to taget all the column rather than a range of cells
             CellRangeAddressList addressList2 = new CellRangeAddressList(-1, -1, 6, 6);
-            setDataValidation(codecs_sheet, addressList2, dataTypesArray);
-            //setDataValidation(codecs_sheet, addressList2, dataTypesArray);
+            // setDataValidation(codecs_sheet, addressList2, dataTypesArray);
+            // setDataValidation(codecs_sheet, addressList2, dataTypesArray);
 
-            xsdReader.documentReader(".\\data-files\\TA.xsd", "xsd:simpleType", "xsd:restriction", "xsd:enumeration",
-                    "XsdFieldProperty");
+            setDataValidation1(primitives_sheet, getCellRangeAddress(primitiveHeader, "Format"),
+                    getXsdList("XsdFormat"));
+            setDataValidation1(primitives_sheet, getCellRangeAddress(primitiveHeader, "Type"),
+                    getXsdList("XsdPrimitiveType"));
+
+            setDataValidation1(arrays_sheet, getCellRangeAddress(arrayHeader, "ElementType"),
+                    getDataValidation(arrayTypes));
+
+            setDataValidation1(structures_sheet, getCellRangeAddress(structureHeader, "FieldType"),
+                    getDataValidation(structTypes));
+            setDataValidation1(codecs_sheet, getCellRangeAddress(codecsHeader, "FieldProperty"),
+                    getXsdList("XsdFieldProperty"));
+            String[] part = { "HEADER", "FOOTER" };
+            setDataValidation1(codecs_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
+                    getXsdList("XsdByteOrder"));
+            setDataValidation1(codecs_sheet, getCellRangeAddress(codecsHeader, "CodecPart"), part);
+            setDataValidation1(codecs_sheet, addressList2, getDataValidation(codecFieldType));
+
+            String[] codecMessagePart = { "MESSAGES" };
+            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "ByteOrder"),
+                    getXsdList("XsdByteOrder"));
+            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecsHeader, "CodecPart"), codecMessagePart);
+            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
+                    getXsdList("XsdByteOrder"));
+
+            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "MessageName"),
+                    getDataValidation(messageNames));
 
             try {
                 FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
@@ -484,11 +536,32 @@ public class basicIdea {
 
     }
 
+    public static String[] getDataValidation(Set<String> set) {
+
+        String[] dataValidatinlist = new String[10];
+        dataValidatinlist = set.toArray(dataValidatinlist);
+        String[] dataTypesArray = set.toArray(new String[0]);
+        return dataTypesArray;
+    }
+
     public static void setAutoSizedColumns(XSSFSheet sheet) {
         Row headerRow = sheet.getRow(0);
         for (int i = 0; i < headerRow.getLastCellNum(); i++) {
             sheet.autoSizeColumn(i);
         }
+    }
+
+    public static CellRangeAddressList getCellRangeAddress(String[] headerRow, String columnName) {
+        // get the index of a string in an array
+        int index = 0;
+        for (int i = 0; i < headerRow.length; i++) {
+            if (headerRow[i].equals(columnName)) {
+                index = i;
+            }
+        }
+        // create a range of cells
+        CellRangeAddressList addressList = new CellRangeAddressList(-1, -1, index, index);
+        return addressList;
     }
 
     // set header row per sheet
@@ -504,18 +577,32 @@ public class basicIdea {
         return rowNum;
     }
 
+    public static String[] getXsdList(String nodeName) {
+        String[] primitiveFormatList;
+        try {
+            primitiveFormatList = xsdReader.documentReader(".\\data-files\\TA.xsd", "xsd:simpleType",
+                    "xsd:restriction", "xsd:enumeration",
+                    nodeName);
+            return primitiveFormatList;
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void setDataValidation(XSSFSheet sheet, CellRangeAddressList addressList, String[] dropDownList) {
 
         DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
-        // use antoher type of function to make validation concrete and as comprehensive
-        // as possible to take the whole column
-        // DataValidationConstraint constraint =
-        // validationHelper.createExplicitListConstraint(dropDownList);
-        // create a data validation constraint with excel formula\
-        // DataValidationConstraint constraint =
-        // validationHelper.createFormulaListConstraint("$B$1:$B$" +
-        // (dropDownList.length + 1));
-        DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("$A$2:$A$1048576");
+        // DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(dropDownList);
+        // create a data validation constraint with excel formula
+
+        // DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("$B$1:$B$" + (dropDownList.length + 1));
+        // DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("$A$2:$A$1048576");
+        // DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("UNIQUE($A$2)");
+
+        DataValidationConstraint constraint = validationHelper
+                .createFormulaListConstraint("($A$2:$A$23)");
 
         DataValidation dataValidation = validationHelper.createValidation(constraint, addressList);
         dataValidation.setSuppressDropDownArrow(true);
@@ -528,26 +615,13 @@ public class basicIdea {
     public static void setDataValidation1(XSSFSheet sheet, CellRangeAddressList addressList, String[] dropDownList) {
 
         DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
-        // use antoher type of function to make validation concrete and as comprehensive
-        // as possible to take the whole column
         DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(dropDownList);
-        // create a data validation constraint with excel formula\
-        // DataValidationConstraint constraint =
-        // validationHelper.createFormulaListConstraint("$B$1:$B$" +
-        // (dropDownList.length + 1));
-        // DataValidationConstraint constraint =
-        // validationHelper.createFormulaListConstraint("$B$2:$B$1048576");
-
         DataValidation dataValidation = validationHelper.createValidation(constraint, addressList);
         dataValidation.setSuppressDropDownArrow(true);
         dataValidation.getEmptyCellAllowed();
         dataValidation.setShowErrorBox(true);
         sheet.addValidationData(dataValidation);
 
-    }
-
-    public static CellRangeAddressList formRangeList(int firstRow, int lastRow, int firstCol, int lastCol) {
-        return new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
     }
 
 }

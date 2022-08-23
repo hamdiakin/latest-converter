@@ -1,5 +1,4 @@
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -23,6 +22,7 @@ import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import structuralClasses.*;
 
 public class formXML {
     private static final String FILE_NAME = "output.xlsx";
@@ -73,7 +73,10 @@ public class formXML {
                 while (cellIterator.hasNext()) {
                     Cell currentCell = cellIterator.next();
                     counter++;
-                    lineInfo[counter] = currentCell.getStringCellValue();
+                    if (currentCell.getCellType() == Cell.CELL_TYPE_STRING)
+                        lineInfo[counter] = currentCell.getStringCellValue();
+                    else
+                        lineInfo[counter] = Integer.toString((int) currentCell.getNumericCellValue());
                 }
                 codecInfo.add(Arrays.copyOf(lineInfo, 10));
 
@@ -106,9 +109,9 @@ public class formXML {
                         }
 
                         if (line[3].equals("HEADER")) {
-                            headerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
+                            headerFields.add(new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7]));
                         } else if (line[3].equals("FOOTER")) {
-                            footerFields.add(new CodecFields(line[4], line[5], line[6], line[7]));
+                            footerFields.add(new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7]));
                         } else if (line[3].equals("MESSAGES")) {
                             codecMessages.add(new CodecMessage(line[4]));
                         }
@@ -150,28 +153,42 @@ public class formXML {
             ArrayList<Primitives> primitive_list = new ArrayList<Primitives>();
 
             name = "";
-            String messageID = "";
+            int messageID = -1;
 
             int wbSheetNumber = workbook.getNumberOfSheets();
             String sheetNames[] = new String[wbSheetNumber];
-
+            boolean isEndOfSheet = false;
             for (int i = 0; i < wbSheetNumber; i++) {
                 sheetNames[i] = workbook.getSheetName(i);
             }
 
             for (String sheetName : sheetNames) {
-                // dont touch above
                 datatypeSheet = workbook.getSheet(sheetName);
+                message_info.clear();
                 iterator = datatypeSheet.iterator();
+                iterator.next();
                 while (iterator.hasNext()) {
+                    // checking only the sheet name is making an edge case
+                    // when it's end of the sheet and contd true the content of message info will be
+                    // carried out to the next sheet causing problems
+                    isEndOfSheet = false;
                     Row currentRow = iterator.next();
+
+                    if (iterator.hasNext() == false) {
+                        isEndOfSheet = true;
+                        message_info.clear();
+                    }
+
                     Iterator<Cell> cellIterator = currentRow.iterator();
                     counter = 0;
                     while (cellIterator.hasNext()) {
                         Cell currentCell = cellIterator.next();
                         // System.out.print(currentCell.getStringCellValue() + "--");
                         counter++;
-                        lineInfo[counter] = currentCell.getStringCellValue();
+                        if (currentCell.getCellType() == Cell.CELL_TYPE_STRING)
+                            lineInfo[counter] = currentCell.getStringCellValue();
+                        else
+                            lineInfo[counter] = Integer.toString((int) currentCell.getNumericCellValue());
                     }
                     message_info.add(Arrays.copyOf(lineInfo, 10));
 
@@ -189,20 +206,22 @@ public class formXML {
                                     contdPart = false;
                                 }
                             }
-                            //TODO last message dont apper on the message list
-                            if (contdPart == false) {
+                            // TODO last message dont apper on the message list
+                            if (contdPart == false || isEndOfSheet == true) {
                                 // object notations will be here
                                 lastItem = message_info.get(message_info.size() - 1);
                                 message_info.remove(message_info.size() - 1);
                                 // iterate over the codecInfo array list and form the objects
                                 for (String[] line : message_info) {
                                     if (line[5].equals("")) {
-                                        message_fields.add(new MessageFields(line[3], line[4], line[5]));
+                                        message_fields
+                                                .add(new MessageFields(line[3], Integer.parseInt(line[4]), line[5]));
                                     } else {
-                                        message_fields.add(new MessageFields(line[3], line[4], line[5], line[6]));
+                                        message_fields.add(new MessageFields(line[3], Integer.parseInt(line[4]),
+                                                line[5], line[6]));
                                     }
                                     name = line[1];
-                                    messageID = line[2];
+                                    messageID = Integer.parseInt(line[2]);
                                 }
 
                                 message_list.add(new Messages(name, messageID, new ArrayList<>(message_fields)));
@@ -212,11 +231,10 @@ public class formXML {
                                 message_fields.clear();
                                 message_info.add(lastItem);
                             }
-
                             break;
                         case "arrays":
                             arraytype_list.add(new ArrayType(message_info.get(0)[1], message_info.get(0)[2],
-                                    message_info.get(0)[3]));
+                                    Integer.parseInt(message_info.get(0)[3])));
                             message_info.clear();
                             break;
                         case "structures":
@@ -230,13 +248,14 @@ public class formXML {
                                 }
                             }
 
-                            if (contdPart == false) {
+                            if (contdPart == false || isEndOfSheet == true) {
                                 // object notations will be here
                                 lastItem = message_info.get(message_info.size() - 1);
                                 message_info.remove(message_info.size() - 1);
                                 // iterate over the codecInfo array list and form the objects
                                 for (String[] line : message_info) {
-                                    structure_fields.add(new StructureFields(line[2], line[3], line[4], line[5]));
+                                    structure_fields.add(
+                                            new StructureFields(line[2], line[3], Integer.parseInt(line[4]), line[5]));
                                     name = line[1];
                                 }
 
@@ -252,11 +271,13 @@ public class formXML {
                         case "primitives":
                             primitive_list.add(
                                     new Primitives(message_info.get(0)[1], message_info.get(0)[2],
-                                            message_info.get(0)[3], message_info.get(0)[4], message_info.get(0)[5]));
+                                            Integer.parseInt(message_info.get(0)[4]),
+                                            Integer.parseInt(message_info.get(0)[5]), message_info.get(0)[3]));
                             message_info.clear();
                             break;
 
                     }
+
                 }
 
                 // dont touch below
@@ -265,9 +286,10 @@ public class formXML {
             // Header info must be removed from all of the lists
             primitive_list.remove(0);
             message_list.remove(0);
-            structure_list.remove(0);
+            // structure_list.remove(0);
             arraytype_list.remove(0);
             codec_list.remove(0);
+
             // TODO: not quite sure that how to sum this up but try to remove the header
             // info from all of the lists
             // codecMessages.remove(0);
@@ -301,8 +323,8 @@ public class formXML {
                 rootTypes.appendChild(primitiveElement);
                 primitiveElement.setAttribute("name", primitive.getName());
                 primitiveElement.setAttribute("id", primitive.getFormat());
-                primitiveElement.setAttribute("type", primitive.getSizeInBytes());
-                primitiveElement.setAttribute("size", primitive.getSizeInBits());
+                primitiveElement.setAttribute("type", Integer.toString(primitive.getSizeInBytes()));
+                primitiveElement.setAttribute("size", Integer.toString(primitive.getSizeInBits()));
                 primitiveElement.setAttribute("byteOrder", primitive.getType());
             }
             // line breaker
@@ -321,7 +343,7 @@ public class formXML {
                     if (!field.getElementCountStructureField().equals(""))
                         fieldElement.setAttribute("elementCountStructureField",
                                 field.getElementCountStructureField());
-                    fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
+                    fieldElement.setAttribute("fieldIndex", Integer.toString(field.getFieldIndex()));
                 }
             }
 
@@ -334,9 +356,9 @@ public class formXML {
                 rootTypes.appendChild(arrayTypeElement);
                 arrayTypeElement.setAttribute("name", arrayType.getName());
                 arrayTypeElement.setAttribute("elementType", arrayType.getElementType());
-                if (!arrayType.getConstantElementCount().equals("")) {
+                if (arrayType.getConstantElementCount() != (-1)) {
                     arrayTypeElement.setAttribute("constantElementCount",
-                            arrayType.getConstantElementCount());
+                            "");
                 }
 
             }
@@ -352,7 +374,7 @@ public class formXML {
                 Element messageElement = doc.createElement("message");
                 messagesElement.appendChild(messageElement);
                 messageElement.setAttribute("name", message.getName());
-                messageElement.setAttribute("id", message.getId());
+                messageElement.setAttribute("id", Integer.toString(message.getId()));
                 for (MessageFields field : message.getMessageFields()) {
                     Element fieldElement = doc.createElement("field");
                     messageElement.appendChild(fieldElement);
@@ -361,7 +383,7 @@ public class formXML {
                     if (!field.getElementCountField().equals(""))
                         fieldElement.setAttribute("elementCountMessageField",
                                 field.getElementCountField());
-                    fieldElement.setAttribute("fieldIndex", field.getfIndex());
+                    fieldElement.setAttribute("fieldIndex", Integer.toString(field.getfIndex()));
                 }
                 Text lineBreakMessages = doc.createTextNode("\n");
                 messagesElement.appendChild(lineBreakMessages);
@@ -391,7 +413,7 @@ public class formXML {
                     fieldElement.setAttribute("name", field.getName());
                     if (!field.getFieldProperty().equals(""))
                         fieldElement.setAttribute("fieldProperty", field.getFieldProperty());
-                    fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
+                    fieldElement.setAttribute("fieldIndex", Integer.toString(field.getFieldIndex()));
                     fieldElement.setAttribute("type", field.getType());
                 }
                 /*
@@ -408,7 +430,7 @@ public class formXML {
                     footerElement.appendChild(fieldElement);
                     fieldElement.setAttribute("name", field.getName());
                     fieldElement.setAttribute("fieldProperty", field.getFieldProperty());
-                    fieldElement.setAttribute("fieldIndex", field.getFieldIndex());
+                    fieldElement.setAttribute("fieldIndex", Integer.toString(field.getFieldIndex()));
                     fieldElement.setAttribute("type", field.getType());
                 }
 
@@ -460,7 +482,7 @@ public class formXML {
         transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "");
 
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("ata.xml"));
+        StreamResult result = new StreamResult(new File("xmlOut.xml"));
 
         transformer.transform(source, result);
 

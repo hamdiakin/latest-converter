@@ -1,4 +1,6 @@
-class CodecMessage {
+package structuralClasses;
+
+public class CodecMessage {
     String name = "";
 
     public CodecMessage(String name) {

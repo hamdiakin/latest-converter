@@ -1,15 +1,17 @@
+package structuralClasses;
+
 import java.util.ArrayList;
 
 public class Messages{
     String name = "";
-    String id = "";
+    int id ;
     ArrayList<MessageFields> Messagefields = new ArrayList<MessageFields>();
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -21,7 +23,7 @@ public class Messages{
         return name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -29,7 +31,7 @@ public class Messages{
         return Messagefields;
     }
 
-    public Messages(String name, String id, ArrayList<MessageFields> Messagefields) {
+    public Messages(String name, int id, ArrayList<MessageFields> Messagefields) {
         this.name = name;
         this.id = id;
         this.Messagefields = Messagefields;

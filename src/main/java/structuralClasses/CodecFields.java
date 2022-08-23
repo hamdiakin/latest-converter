@@ -1,7 +1,9 @@
-class CodecFields {
+package structuralClasses;
+
+public class CodecFields {
     String name = "" ;
     String fieldProperty = "";
-    String fieldIndex = "";
+    int fieldIndex ;
     String type = "";
 
     public String getName() {
@@ -20,11 +22,11 @@ class CodecFields {
         this.fieldProperty = fieldProperty;
     }
 
-    public String getFieldIndex() {
+    public int getFieldIndex() {
         return fieldIndex;
     }
 
-    public void setFieldIndex(String fieldIndex) {
+    public void setFieldIndex(int fieldIndex) {
         this.fieldIndex = fieldIndex;
     }
 
@@ -36,7 +38,7 @@ class CodecFields {
         this.type = type;
     }
 
-    public CodecFields(String name, String fieldProperty, String fieldIndex, String type) {
+    public CodecFields(String name, String fieldProperty, int fieldIndex, String type) {
         this.name = name;
         this.fieldProperty = fieldProperty;
         this.fieldIndex = fieldIndex;

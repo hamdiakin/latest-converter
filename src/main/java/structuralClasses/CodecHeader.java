@@ -1,6 +1,8 @@
+package structuralClasses;
+
 import java.util.ArrayList;
 
-class CodecHeader {
+public class CodecHeader {
     ArrayList<CodecFields> headerFields = new ArrayList<CodecFields>();
 
     public ArrayList<CodecFields> getHeaderFields() {

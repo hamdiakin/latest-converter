@@ -1,3 +1,5 @@
+package structuralClasses;
+
 import java.util.ArrayList;
 
 

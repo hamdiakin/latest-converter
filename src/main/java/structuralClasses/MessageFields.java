@@ -1,17 +1,19 @@
-class MessageFields{
+package structuralClasses;
+
+public class MessageFields{
     String name = "";
-    String fIndex = "";
+    int fIndex ;
     String type = "";
     String elementCountField = "";
     
-    public MessageFields(String name, String fIndex, String type, String elementCountField) {
+    public MessageFields(String name, int fIndex, String type, String elementCountField) {
         this.name = name;
         this.fIndex = fIndex;
         this.type = type;
         this.elementCountField = elementCountField;
     }
 
-    public MessageFields(String name, String fIndex, String type) {
+    public MessageFields(String name, int fIndex, String type) {
         this.name = name;
         this.fIndex = fIndex;
         this.type = type;
@@ -26,11 +28,11 @@ class MessageFields{
         this.name = name;
     }
 
-    public String getfIndex() {
+    public int getfIndex() {
         return fIndex;
     }
 
-    public void setfIndex(String fIndex) {
+    public void setfIndex(int fIndex) {
         this.fIndex = fIndex;
     }
 

@@ -16,14 +16,14 @@ import org.w3c.dom.Element;
 public class xsdReader {
     static String PATH_NAME = ".\\data-files\\TA.xsd";
 
-    public static void documentReader(String pathName, String elementLvl1, String elementLvl2, String elementLvl3,
+    public static String[] documentReader(String pathName, String elementLvl1, String elementLvl2, String elementLvl3,
             String type) throws ParserConfigurationException, SAXException, IOException {
         try {
             // parse the document
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(new File(pathName));
-            getXsdInfo(doc, elementLvl1, elementLvl2, elementLvl3, type);
+            return getXsdInfo(doc, elementLvl1, elementLvl2, elementLvl3, type);
         }
         // if(element3.hasAttributes() &&
         // element3.getAttribute("value").equals("^[a-zA-Z0-9]{1,}$"))
@@ -34,6 +34,7 @@ public class xsdReader {
         } catch (IOException ed) {
             ed.printStackTrace();
         }
+        return null;
     }
 
     public static String[] getXsdInfo(Document doc, String elementLvl1, String elementLvl2, String elementLvl3,
@@ -66,9 +67,13 @@ public class xsdReader {
         return typeList;
     }
 
-    /* public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-        documentReader(PATH_NAME, "xsd:simpleType", "xsd:restriction", "xsd:enumeration", "XsdFieldProperty");
-    } */
+    /*
+     * public static void main(String[] args) throws ParserConfigurationException,
+     * SAXException, IOException {
+     * documentReader(PATH_NAME, "xsd:simpleType", "xsd:restriction",
+     * "xsd:enumeration", "XsdFieldProperty");
+     * }
+     */
 }
 
 /*

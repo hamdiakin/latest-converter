@@ -1,6 +1,8 @@
+package structuralClasses;
+
 import java.util.ArrayList;
 
-class CodecFooter {
+public class CodecFooter {
     ArrayList<CodecFields> footerFields = new ArrayList<CodecFields>();
 
     public ArrayList<CodecFields> getFooterFields() {

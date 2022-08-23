@@ -1,25 +1,27 @@
-class StructureFields {
+package structuralClasses;
+
+public class StructureFields {
     String name = "" ;
     String type = "";
     String elementCountStructureField = "";
-    String fieldIndex = "";
+    int fieldIndex;
 
-    public String getFieldIndex() {
+    public int getFieldIndex() {
         return fieldIndex;
     }
 
-    public void setFieldIndex(String fieldIndex) {
+    public void setFieldIndex(int fieldIndex) {
         this.fieldIndex = fieldIndex;
     }
 
-    public StructureFields(String name, String type, String fieldIndex, String elementCountStructureField) {
+    public StructureFields(String name, String type, int fieldIndex, String elementCountStructureField) {
         this.name = name;
         this.type = type;
         this.fieldIndex = fieldIndex;
         this.elementCountStructureField = elementCountStructureField;
     }
 
-    public StructureFields(String name, String type, String fieldIndex) {
+    public StructureFields(String name, String type, int fieldIndex) {
         this.name = name;
         this.type = type;
         this.fieldIndex = fieldIndex;

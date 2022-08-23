@@ -5,13 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="326c1014-1b18-42b6-ae5d-1478ed03a338" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ata.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ata.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ata.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/output.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/output.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CodecFields.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CodecFooter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CodecHeader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CodecMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Codecs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MessageFields.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Messages.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/StructureFields.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Structures.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/basicIdea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/basicIdea.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/formXML.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/formXML.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/issues.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/issues.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/ArrayType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/ArrayType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/Primitives.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/Primitives.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xml2xlsx/xsdReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xml2xlsx/xsdReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ArrayType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/CodecFields.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/CodecFooter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/CodecHeader.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/CodecMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Codecs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/MessageFields.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Messages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Primitives.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/StructureFields.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Structures.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/basicIdea.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/basicIdea.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/formXML.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/formXML.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/issues.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/issues.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/xml2xlsx/xsdReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/xml2xlsx/xsdReader.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

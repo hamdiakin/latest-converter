@@ -1,3 +1,5 @@
+package structuralClasses;
+
 public class Primitives {
     String name = "";
     String format = "";
