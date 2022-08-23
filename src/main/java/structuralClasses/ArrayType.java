@@ -1,9 +1,9 @@
 public class ArrayType {
     String name = "";
     String elementType = "";
-    String constantElementCount = "";
+    int constantElementCount;
 
-    public ArrayType(String name, String elementType, String constantElementCount) {
+    public ArrayType(String name, String elementType, int constantElementCount) {
         this.name = name;
         this.elementType = elementType;
         this.constantElementCount = constantElementCount;
@@ -11,7 +11,7 @@ public class ArrayType {
     public ArrayType(String name, String elementType) {
         this.name = name;
         this.elementType = elementType;
-        this.constantElementCount = "";
+        this.constantElementCount = -1;
     }
 
     public String getName() {
@@ -30,11 +30,11 @@ public class ArrayType {
         this.elementType = elementType;
     }
 
-    public String getConstantElementCount() {
+    public int getConstantElementCount() {
         return constantElementCount;
     }
 
-    public void setConstantElementCount(String constantElementCount) {
+    public void setConstantElementCount(int constantElementCount) {
         this.constantElementCount = constantElementCount;
     }
 }

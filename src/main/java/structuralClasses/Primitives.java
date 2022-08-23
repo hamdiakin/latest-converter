@@ -1,8 +1,8 @@
 public class Primitives {
     String name = "";
     String format = "";
-    String sizeInBytes = "";
-    String sizeInBits = "";
+    int sizeInBytes;
+    int sizeInBits;
     String type = "";
 
     public void setName(String name) {
@@ -13,11 +13,11 @@ public class Primitives {
         this.format = format;
     }
 
-    public void setSizeInBytes(String sizeInBytes) {
+    public void setSizeInBytes(int sizeInBytes) {
         this.sizeInBytes = sizeInBytes;
     }
 
-    public void setSizeInBits(String sizeInBits) {
+    public void setSizeInBits(int sizeInBits) {
         this.sizeInBits = sizeInBits;
     }
 
@@ -33,11 +33,11 @@ public class Primitives {
         return format;
     }
 
-    public String getSizeInBytes() {
+    public int getSizeInBytes() {
         return sizeInBytes;
     }
 
-    public String getSizeInBits() {
+    public int getSizeInBits() {
         return sizeInBits;
     }
 
@@ -45,7 +45,7 @@ public class Primitives {
         return type;
     }
 
-    public Primitives(String name, String format, String sizeInBytes, String sizeInBits, String type) {
+    public Primitives(String name, String format, int sizeInBytes, int sizeInBits, String type) {
         this.name = name;
         this.format = format;
         this.sizeInBytes = sizeInBytes;
