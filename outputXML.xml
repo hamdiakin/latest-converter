@@ -2,25 +2,34 @@
 <TA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TA.xsd">
     
     <types>
+        <primitive byteOrder="byte" id="CB2" name="BYTE_CB2" size="8" type="0"/>
         <primitive byteOrder="byte" id="BNR" name="BYTE" size="8" type="0"/>
         <primitive byteOrder="int" id="BNR" name="UINT_8" size="8" type="0"/>
         <primitive byteOrder="String" id="STR" name="STRING_10CHAR" size="0" type="10"/>
         <primitive byteOrder="String" id="STR" name="STRING_VARSIZE" size="0" type="1"/>
         <primitive byteOrder="char" id="CB2" name="CHAR" size="8" type="0"/>
         
-        <structure name=""/>
+        <structure name="STRUCT1">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field elementCountStructureField="field0" fieldIndex="1" name="field1" type="UINT_8_Array"/>
+        </structure>
         
-        <arrayType constantElementCount="" elementType="BYTE" name="CheckSumArray"/>
-        <arrayType constantElementCount="" elementType="BYTE_CB2" name="CharArray"/>
-        <arrayType constantElementCount="" elementType="UINT_8" name="UINT_8_Array"/>
-        <arrayType constantElementCount="" elementType="UINT_8" name="UINT_8_Array_Len3"/>
-        <arrayType constantElementCount="" elementType="STRUCT1" name="STRUCT1_Array_VarSize"/>
-        <arrayType constantElementCount="" elementType="STRUCT1" name="STRUCT1_Array_ConstSize3"/>
-        <arrayType constantElementCount="" elementType="CHAR" name="CharTypeArray"/>
-        <arrayType constantElementCount="" elementType="BYTE" name="PreambleNoConstSizeArray"/>
+        <arrayType constantElementCount="1" elementType="BYTE" name="PrePostAmbleArray"/>
+        <arrayType constantElementCount="2" elementType="BYTE" name="CheckSumArray"/>
+        <arrayType elementType="BYTE_CB2" name="CharArray"/>
+        <arrayType elementType="UINT_8" name="UINT_8_Array"/>
+        <arrayType constantElementCount="3" elementType="UINT_8" name="UINT_8_Array_Len3"/>
+        <arrayType elementType="STRUCT1" name="STRUCT1_Array_VarSize"/>
+        <arrayType constantElementCount="3" elementType="STRUCT1" name="STRUCT1_Array_ConstSize3"/>
+        <arrayType elementType="CHAR" name="CharTypeArray"/>
+        <arrayType elementType="BYTE" name="PreambleNoConstSizeArray"/>
     </types>
     
     <messages>
+        <message id="1" name="Message1">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+        </message>
+        
         <message id="2" name="Message2">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
             <field fieldIndex="1" name="field1" type="UINT_8"/>
@@ -70,11 +79,32 @@
             <field fieldIndex="0" name="field0" type="UINT_8"/>
         </message>
         
-        <message id="10" name="Message10"/>
+        <message id="12" name="Message12">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+        </message>
         
     </messages>
     
     <codecs>
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            <message name="Message2"/>
+            <message name="Message3"/>
+            <message name="Message4"/>
+            <message name="Message5"/>
+            <message name="Message6"/>
+            <message name="Message7"/>
+            <message name="Message8"/>
+            <message name="Message9"/>
+            <message name="Message13"/>
+            
+        </codec>
         
         <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PrePost_BigEnd">
             <header>
@@ -169,6 +199,18 @@
                 <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
                 <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
                 <field fieldIndex="2" name="fieldHeaderArr" type="UINT_8_Array_Len3"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PreIdLen_BigEnd_HeaderArray">
+            <header>
+                <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble123" type="PreambleNoConstSizeArray"/>
+                <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="2" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
             </header>
             <footer/>
             

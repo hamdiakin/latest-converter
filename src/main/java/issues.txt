@@ -1,2 +1,0 @@
-1- when a numeric entry has inserted into xls file program will crush +++
-2- 

@@ -1,3 +1,4 @@
+package xml2xlsx;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -27,7 +28,6 @@ import structuralClasses.*;
 public class formXML {
     private static final String FILE_NAME = "output.xlsx";
 
-    // main method
     public static void main(String[] args) throws ParserConfigurationException, TransformerException {
         try {
 
@@ -48,6 +48,8 @@ public class formXML {
             Sheet codecMessagesSheet = workbook.getSheet("codecMessages");
 
             HashMap<String, ArrayList<CodecMessage>> messageInfo4Codec = messageInfo4Codec(codecMessagesSheet);
+            ArrayList<CodecMessage> codecMessage_empt = new ArrayList<CodecMessage>();
+            codecMessage_empt.add(new CodecMessage("name"));
 
             // counter will be used for keeping track of codec via name of the main tags
             int counter;
@@ -57,6 +59,7 @@ public class formXML {
             boolean samePart = true;
             String previousCodecName = "";
             String currentCodecName = "";
+            boolean isEndOfCodecSheet = false;
 
             // all the part below belongs to codec part
             // array list for holding a single codec info
@@ -66,8 +69,12 @@ public class formXML {
             String[] lineInfo = new String[10];
             String[] lastItem = new String[10];
 
+            isEndOfCodecSheet = false;
+            iterator.next();
             while (iterator.hasNext()) {
                 Row currentRow = iterator.next();
+                if (!iterator.hasNext())
+                    isEndOfCodecSheet = true;
                 Iterator<Cell> cellIterator = currentRow.iterator();
                 counter = 0;
                 while (cellIterator.hasNext()) {
@@ -93,10 +100,11 @@ public class formXML {
                     }
                 }
 
-                if (contdPart == false) {
+                if (contdPart == false || isEndOfCodecSheet == true) {
                     // object notations will be here
                     lastItem = codecInfo.get(codecInfo.size() - 1);
-                    codecInfo.remove(codecInfo.size() - 1);
+                    if (contdPart == false && !isEndOfCodecSheet)
+                        codecInfo.remove(codecInfo.size() - 1);
 
                     // iterate over the codecInfo array list and form the objects
                     String lineThree = codecInfo.get(0)[3];
@@ -158,6 +166,8 @@ public class formXML {
             int wbSheetNumber = workbook.getNumberOfSheets();
             String sheetNames[] = new String[wbSheetNumber];
             boolean isEndOfSheet = false;
+
+            // get sheet names and append them into a string array
             for (int i = 0; i < wbSheetNumber; i++) {
                 sheetNames[i] = workbook.getSheetName(i);
             }
@@ -165,19 +175,19 @@ public class formXML {
             for (String sheetName : sheetNames) {
                 datatypeSheet = workbook.getSheet(sheetName);
                 message_info.clear();
+                isEndOfSheet = false;
                 iterator = datatypeSheet.iterator();
                 iterator.next();
+
                 while (iterator.hasNext()) {
                     // checking only the sheet name is making an edge case
                     // when it's end of the sheet and contd true the content of message info will be
                     // carried out to the next sheet causing problems
-                    isEndOfSheet = false;
+
                     Row currentRow = iterator.next();
 
-                    if (iterator.hasNext() == false) {
+                    if (iterator.hasNext() == false)
                         isEndOfSheet = true;
-                        message_info.clear();
-                    }
 
                     Iterator<Cell> cellIterator = currentRow.iterator();
                     counter = 0;
@@ -251,7 +261,8 @@ public class formXML {
                             if (contdPart == false || isEndOfSheet == true) {
                                 // object notations will be here
                                 lastItem = message_info.get(message_info.size() - 1);
-                                message_info.remove(message_info.size() - 1);
+                                if (contdPart == false && !isEndOfSheet)
+                                    message_info.remove(message_info.size() - 1);
                                 // iterate over the codecInfo array list and form the objects
                                 for (String[] line : message_info) {
                                     structure_fields.add(
@@ -275,42 +286,35 @@ public class formXML {
                                             Integer.parseInt(message_info.get(0)[5]), message_info.get(0)[3]));
                             message_info.clear();
                             break;
-
                     }
 
                 }
 
-                // dont touch below
             }
 
             // Header info must be removed from all of the lists
-            primitive_list.remove(0);
-            message_list.remove(0);
-            // structure_list.remove(0);
-            arraytype_list.remove(0);
-            codec_list.remove(0);
+            /*
+             * primitive_list.remove(0);
+             * message_list.remove(0);
+             * structure_list.remove(0);
+             * arraytype_list.remove(0);
+             * codec_list.remove(0);
+             */
 
             // TODO: not quite sure that how to sum this up but try to remove the header
             // info from all of the lists
             // codecMessages.remove(0);
 
             workbook.close();
-
-            // System.out.println("Done");
-
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
             // root elements
-
             Document doc = docBuilder.newDocument();
-
             Element root = doc.createElement("TA");
             doc.appendChild(root);
 
-            // line breaker
-            Text lineBreak6 = (Text) doc.createTextNode("\n\n");
-            root.appendChild(lineBreak6);
+            putLineBreak(doc, root);
 
             root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
             root.setAttribute("xsi:noNamespaceSchemaLocation", "TA.xsd");
@@ -327,9 +331,7 @@ public class formXML {
                 primitiveElement.setAttribute("size", Integer.toString(primitive.getSizeInBits()));
                 primitiveElement.setAttribute("byteOrder", primitive.getType());
             }
-            // line breaker
-            Text lineBreak = (Text) doc.createTextNode("\n");
-            rootTypes.appendChild(lineBreak);
+            putLineBreak(doc, rootTypes);
 
             for (Structures structure : structure_list) {
                 Element structureElement = doc.createElement("structure");
@@ -347,25 +349,21 @@ public class formXML {
                 }
             }
 
-            // line breaker
-            Text lineBreak1 = (Text) doc.createTextNode("\n");
-            rootTypes.appendChild(lineBreak1);
+            putLineBreak(doc, rootTypes);
 
             for (ArrayType arrayType : arraytype_list) {
                 Element arrayTypeElement = doc.createElement("arrayType");
                 rootTypes.appendChild(arrayTypeElement);
                 arrayTypeElement.setAttribute("name", arrayType.getName());
                 arrayTypeElement.setAttribute("elementType", arrayType.getElementType());
-                if (arrayType.getConstantElementCount() != (-1)) {
+                if (arrayType.getConstantElementCount() != -1) {
                     arrayTypeElement.setAttribute("constantElementCount",
-                            "");
+                            Integer.toString(arrayType.getConstantElementCount()));
                 }
 
             }
 
-            // line breaker
-            Text lineBreak2 = (Text) doc.createTextNode("\n\n");
-            root.appendChild(lineBreak2);
+            putLineBreak(doc, root);
 
             Element messagesElement = doc.createElement("messages");
             root.appendChild(messagesElement);
@@ -394,9 +392,7 @@ public class formXML {
 
             Element rootCodecs = doc.createElement("codecs");
             root.appendChild(rootCodecs);
-            // line breaker
-            Text lineBreak5 = (Text) doc.createTextNode("\n\n");
-            rootCodecs.appendChild(lineBreak5);
+            putLineBreak(doc, root);
 
             for (Codecs codec : codec_list) {
                 Element codecElement = doc.createElement("codec");
@@ -416,10 +412,6 @@ public class formXML {
                     fieldElement.setAttribute("fieldIndex", Integer.toString(field.getFieldIndex()));
                     fieldElement.setAttribute("type", field.getType());
                 }
-                /*
-                 * Text codecAfterHeader = doc.createTextNode("\n");
-                 * codecElement.appendChild(codecAfterHeader);
-                 */
 
                 Element footerElement = doc.createElement("footer");
                 codecElement.appendChild(footerElement);
@@ -452,9 +444,7 @@ public class formXML {
                 }
             }
 
-            // line breaker
-            Text lineBreak4 = (Text) doc.createTextNode("\n\n");
-            root.appendChild(lineBreak4);
+            putLineBreak(doc, root);
 
             // print XML to system console
             writeXml(doc, System.out);
@@ -482,16 +472,22 @@ public class formXML {
         transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "");
 
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("xmlOut.xml"));
+        StreamResult result = new StreamResult(new File("outputXML.xml"));
 
         transformer.transform(source, result);
 
+    }
+
+    public static void putLineBreak(Document doc, Element element) {
+        Text lineBreak4 = (Text) doc.createTextNode("\n\n");
+        element.appendChild(lineBreak4);
     }
 
     public static HashMap<String, ArrayList<CodecMessage>> messageInfo4Codec(Sheet sheet) {
         ArrayList<CodecMessage> codecMessageList = new ArrayList<CodecMessage>();
         Iterator<Row> rowIterator = sheet.iterator();
 
+        boolean isEndOfSheet = false;
         HashMap<String, ArrayList<CodecMessage>> codecMessageMap = new HashMap<String, ArrayList<CodecMessage>>();
         int counter = 0;
         String[] lineInfo = new String[10];
@@ -501,11 +497,19 @@ public class formXML {
         boolean contdPart = true;
         String[] lastItem = new String[10];
         String codecName = "";
+        rowIterator.next();
+
+        // to be deleted
+        ArrayList<String> codecNames = new ArrayList<String>();
 
         while (rowIterator.hasNext()) {
             Row currentRow = rowIterator.next();
+            if (!rowIterator.hasNext())
+                isEndOfSheet = true;
+
             Iterator<Cell> cellIterator = currentRow.iterator();
             counter = 0;
+
             while (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
                 counter++;
@@ -516,7 +520,7 @@ public class formXML {
             // empty out the lineinfo array for the next row
             Arrays.fill(lineInfo, "");
 
-            if (codecInfo.size() >= 2) {
+            if (codecInfo.size() > 1) {
                 previousCodecName = codecInfo.get(codecInfo.size() - 2)[1];
                 currentCodecName = codecInfo.get(codecInfo.size() - 1)[1];
                 if (previousCodecName.equals(currentCodecName)) {
@@ -525,8 +529,9 @@ public class formXML {
                     contdPart = false;
                 }
             }
-
-            if (contdPart == false) {
+            // TODO if the last item is same as the previous item then the function will not
+            // attend
+            if (contdPart == false || isEndOfSheet == true) {
                 lastItem = codecInfo.get(codecInfo.size() - 1);
                 codecInfo.remove(codecInfo.size() - 1);
                 for (String[] item : codecInfo) {
@@ -536,10 +541,20 @@ public class formXML {
                 contdPart = true;
                 codecName = codecInfo.get(0)[1];
                 codecMessageMap.put(codecName, new ArrayList<CodecMessage>(codecMessageList));
-
+                codecNames.add(codecName);
                 codecInfo.clear();
                 codecMessageList.clear();
                 codecInfo.add(lastItem);
+                if (isEndOfSheet) {
+                    codecName = codecInfo.get(0)[1];
+                    for (String[] item : codecInfo) {
+                        codecMessageList.add(new CodecMessage(item[4]));
+
+                    }
+                    codecMessageMap.put(codecName, new ArrayList<CodecMessage>(codecMessageList));
+                    codecNames.add(codecName);
+                }
+
             }
         }
 

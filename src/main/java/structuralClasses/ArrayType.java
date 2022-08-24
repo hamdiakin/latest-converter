@@ -10,9 +10,11 @@ public class ArrayType {
         this.elementType = elementType;
         this.constantElementCount = constantElementCount;
     }
+
     public ArrayType(String name, String elementType) {
         this.name = name;
         this.elementType = elementType;
+        this.constantElementCount = -1;
     }
 
     public String getName() {

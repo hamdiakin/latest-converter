@@ -53,7 +53,7 @@ public class xsdReader {
                         for (int k = 0; k < lvl3.getLength(); k++) {
                             Element element3 = (Element) lvl3.item(k);
                             if (element3.hasAttributes()) {
-                                System.out.println(element3.getAttribute("value"));
+                                //System.out.println(element3.getAttribute("value"));
                                 listOfElements.add(element3.getAttribute("value"));
                             }
                         }
