@@ -1,4 +1,5 @@
-package xml2xlsx;
+package xlsx2xml;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -60,6 +61,7 @@ public class formXML {
             String previousCodecName = "";
             String currentCodecName = "";
             boolean isEndOfCodecSheet = false;
+            String defaultValue = "";
 
             // all the part below belongs to codec part
             // array list for holding a single codec info
@@ -117,9 +119,12 @@ public class formXML {
                         }
 
                         if (line[3].equals("HEADER")) {
-                            headerFields.add(new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7]));
+                            headerFields.add(
+                                    new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7], line[8]));
                         } else if (line[3].equals("FOOTER")) {
-                            footerFields.add(new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7]));
+                            footerFields.add(
+                                    new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7], line[8]));
+                            ;
                         } else if (line[3].equals("MESSAGES")) {
                             codecMessages.add(new CodecMessage(line[4]));
                         }
@@ -216,7 +221,6 @@ public class formXML {
                                     contdPart = false;
                                 }
                             }
-                            // TODO last message dont apper on the message list
                             if (contdPart == false || isEndOfSheet == true) {
                                 // object notations will be here
                                 lastItem = message_info.get(message_info.size() - 1);
@@ -292,19 +296,6 @@ public class formXML {
 
             }
 
-            // Header info must be removed from all of the lists
-            /*
-             * primitive_list.remove(0);
-             * message_list.remove(0);
-             * structure_list.remove(0);
-             * arraytype_list.remove(0);
-             * codec_list.remove(0);
-             */
-
-            // TODO: not quite sure that how to sum this up but try to remove the header
-            // info from all of the lists
-            // codecMessages.remove(0);
-
             workbook.close();
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -326,10 +317,10 @@ public class formXML {
                 Element primitiveElement = doc.createElement("primitive");
                 rootTypes.appendChild(primitiveElement);
                 primitiveElement.setAttribute("name", primitive.getName());
-                primitiveElement.setAttribute("id", primitive.getFormat());
-                primitiveElement.setAttribute("type", Integer.toString(primitive.getSizeInBytes()));
-                primitiveElement.setAttribute("size", Integer.toString(primitive.getSizeInBits()));
-                primitiveElement.setAttribute("byteOrder", primitive.getType());
+                primitiveElement.setAttribute("format", primitive.getFormat());
+                primitiveElement.setAttribute("sizeInBytes", Integer.toString(primitive.getSizeInBytes()));
+                primitiveElement.setAttribute("sizeInBits", Integer.toString(primitive.getSizeInBits()));
+                primitiveElement.setAttribute("type", primitive.getType());
             }
             putLineBreak(doc, rootTypes);
 
@@ -411,6 +402,8 @@ public class formXML {
                         fieldElement.setAttribute("fieldProperty", field.getFieldProperty());
                     fieldElement.setAttribute("fieldIndex", Integer.toString(field.getFieldIndex()));
                     fieldElement.setAttribute("type", field.getType());
+                    if (!field.getDefaultValue().equals(""))
+                        fieldElement.setAttribute("defaultValue", field.getDefaultValue());
                 }
 
                 Element footerElement = doc.createElement("footer");
@@ -529,8 +522,6 @@ public class formXML {
                     contdPart = false;
                 }
             }
-            // TODO if the last item is same as the previous item then the function will not
-            // attend
             if (contdPart == false || isEndOfSheet == true) {
                 lastItem = codecInfo.get(codecInfo.size() - 1);
                 codecInfo.remove(codecInfo.size() - 1);
@@ -545,7 +536,7 @@ public class formXML {
                 codecInfo.clear();
                 codecMessageList.clear();
                 codecInfo.add(lastItem);
-                if (isEndOfSheet) {
+                if (isEndOfSheet && contdPart == true) {
                     codecName = codecInfo.get(0)[1];
                     for (String[] item : codecInfo) {
                         codecMessageList.add(new CodecMessage(item[4]));

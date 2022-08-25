@@ -53,7 +53,7 @@ public class xsdReader {
                         for (int k = 0; k < lvl3.getLength(); k++) {
                             Element element3 = (Element) lvl3.item(k);
                             if (element3.hasAttributes()) {
-                                //System.out.println(element3.getAttribute("value"));
+                                // System.out.println(element3.getAttribute("value"));
                                 listOfElements.add(element3.getAttribute("value"));
                             }
                         }
@@ -67,33 +67,4 @@ public class xsdReader {
         return typeList;
     }
 
-    /*
-     * public static void main(String[] args) throws ParserConfigurationException,
-     * SAXException, IOException {
-     * documentReader(PATH_NAME, "xsd:simpleType", "xsd:restriction",
-     * "xsd:enumeration", "XsdFieldProperty");
-     * }
-     */
 }
-
-/*
- * public static String[] getXsdInfo(Document doc, String elementLvl1, String
- * elementLvl2, String elementLvl3,
- * String type) {
- * 
- * NodeList list = doc.getElementsByTagName(elementLvl1);
- * ArrayList<String> listOfElements = new ArrayList<String>();
- * 
- * NodeList levelThree = doc.getElementsByTagName("xsd:enumeration");
- * for (int k = 0; k < levelThree.getLength(); k++) {
- * Element element3 = (Element) levelThree.item(k);
- * if (element3.hasAttributes()) {
- * System.out.println(element3.getAttribute("value"));
- * }
- * }
- * // arraylist to array
- * String[] typeList = listOfElements.toArray(new String[0]);
- * 
- * return typeList;
- * }
- */

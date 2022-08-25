@@ -1,10 +1,11 @@
 package structuralClasses;
 
 public class CodecFields {
-    String name = "" ;
+    String name = "";
     String fieldProperty = "";
-    int fieldIndex ;
+    int fieldIndex;
     String type = "";
+    String defaultValue = "";
 
     public String getName() {
         return name;
@@ -37,11 +38,26 @@ public class CodecFields {
     public void setType(String type) {
         this.type = type;
     }
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 
     public CodecFields(String name, String fieldProperty, int fieldIndex, String type) {
         this.name = name;
         this.fieldProperty = fieldProperty;
         this.fieldIndex = fieldIndex;
         this.type = type;
+    }
+
+    public CodecFields(String name, String fieldProperty, int fieldIndex, String type, String defaultValue) {
+        this.name = name;
+        this.fieldProperty = fieldProperty;
+        this.fieldIndex = fieldIndex;
+        this.type = type;
+        this.defaultValue = defaultValue;
     }
 }

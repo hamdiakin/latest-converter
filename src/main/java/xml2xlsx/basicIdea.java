@@ -1,4 +1,5 @@
-package xlsx2xml;
+package xml2xlsx;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,13 +26,10 @@ import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import xml2xlsx.xsdReader;
 
 public class basicIdea {
     private static final String FILE_NAME = "output.xlsx";
@@ -39,8 +37,8 @@ public class basicIdea {
     // main method
     public static void main(String[] args) {
         // input path is selected as described in the assignment
-        String input_path = ".\\data-files\\easyMessageTest.xml";
-        // String input_path = ".\\ata.xml";
+        String input_path = ".\\data-files\\typeTest.xml";
+        // String input_path = ".\\ata.xm\l";
 
         File xmlFile = new File(input_path);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -88,7 +86,6 @@ public class basicIdea {
                         Node q = arrays.item(j);
                         if (q.getNodeType() == Node.ELEMENT_NODE) {
                             Element field = (Element) q;
-                            // TODO: constantElementCount is initialized as 0, but it should be empty 
                             if (field.getAttribute("constantElementCount").length() > 0) {
                                 arrays_list.add(new ArrayType(field.getAttribute("name"),
                                         field.getAttribute("elementType"),
@@ -101,8 +98,6 @@ public class basicIdea {
                             // System.out.println(field.getAttribute("name"));
                         }
                     }
-
-                    // TODO: for structures, complicated need to solve this
 
                     NodeList structures = type.getElementsByTagName("structure");
                     ArrayList<StructureFields> structureField_list = new ArrayList<StructureFields>();
@@ -213,6 +208,7 @@ public class basicIdea {
                         String fieldProperty = "";
                         String fieldIndex = "";
                         String type = "";
+                        String defaultValue = "";
                         // footer field list
                         ArrayList<CodecFields> footerFields = new ArrayList<CodecFields>();
                         // header field list
@@ -225,16 +221,10 @@ public class basicIdea {
                         if (q.getNodeType() == Node.ELEMENT_NODE) {
                             Element field = (Element) q;
 
-                            // This particular code snippet is dedicated for header fields per codec
                             NodeList header_for_codec = field.getElementsByTagName("header");
-
-                            // This particular code snippet is dedicated for footer fields per codec
                             NodeList footer_for_codec = field.getElementsByTagName("footer");
-
-                            // This particular code snippet is dedicated for messages per codec
                             NodeList messages_for_codec = field.getElementsByTagName("message");
 
-                            // System.out.println(field.getAttribute("name"));
                             codecName = field.getAttribute("name");
                             byteOrder = field.getAttribute("byteOrder");
 
@@ -253,9 +243,17 @@ public class basicIdea {
                                             fieldProperty = codecFieldss.getAttribute("fieldProperty");
                                             fieldIndex = codecFieldss.getAttribute("fieldIndex");
                                             type = codecFieldss.getAttribute("type");
-                                            headerFields
-                                                    .add(new CodecFields(fieldName, fieldProperty,
-                                                            Integer.parseInt(fieldIndex), type));
+
+                                            if (codecFieldss.getAttribute("defaultValue").length() > 0) {
+                                                defaultValue = codecFieldss.getAttribute("defaultValue");
+                                                headerFields
+                                                        .add(new CodecFields(fieldName, fieldProperty,
+                                                                Integer.parseInt(fieldIndex), type, defaultValue));
+                                            } else
+                                                headerFields
+                                                        .add(new CodecFields(fieldName, fieldProperty,
+                                                                Integer.parseInt(fieldIndex), type));
+
                                         }
 
                                     }
@@ -288,19 +286,16 @@ public class basicIdea {
 
                                 }
                             }
-
                             // This particular code snippet is dedicated for messages per codec
                             for (int k = 0; k < messages_for_codec.getLength(); k++) {
                                 Node r = messages_for_codec.item(k);
                                 if (r.getNodeType() == Node.ELEMENT_NODE) {
                                     Element message = (Element) r;
-                                    // System.out.println(message.getAttribute("name"));
                                     codecMessageName = message.getAttribute("name");
                                     codecMessages.add(new CodecMessage(codecMessageName));
                                 }
                             }
 
-                            // codec objects has to be formed under this line
                             codec_list.add(new Codecs(codecName, byteOrder, new CodecHeader(headerFields),
                                     new CodecFooter(footerFields), codecMessages));
                         }
@@ -322,8 +317,6 @@ public class basicIdea {
             int rowNum = 0;
             rowNum = setHeaderRow(primitives_sheet, rowNum, primitiveHeader, workbook, style);
 
-            // TODO: set out the text style of the header row
-
             for (int i = 0; i < primitive_list.size(); i++) {
                 Row row = primitives_sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(primitive_list.get(i).getName());
@@ -341,10 +334,6 @@ public class basicIdea {
             XSSFSheet structures_sheet = workbook.createSheet("structures");
             rowNum = 0;
             rowNum = setHeaderRow(structures_sheet, rowNum, structureHeader, workbook, style);
-            /*
-             * for(Structures structure :structure_list)
-             *
-             */
 
             for (int i = 0; i < structure_list.size(); i++) {
                 for (int j = 0; j < structure_list.get(i).getStructurefields().size(); j++) {
@@ -370,7 +359,8 @@ public class basicIdea {
                 Row row = arrays_sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(arrays_list.get(i).getName());
                 row.createCell(1).setCellValue(arrays_list.get(i).getElementType());
-                row.createCell(2).setCellValue(arrays_list.get(i).getConstantElementCount());
+                if (arrays_list.get(i).getConstantElementCount() != -1)
+                    row.createCell(2).setCellValue(arrays_list.get(i).getConstantElementCount());
                 codecFieldType.add(arrays_list.get(i).getName());
                 structTypes.add(arrays_list.get(i).getName());
             }
@@ -396,7 +386,7 @@ public class basicIdea {
             }
 
             String codecsHeader[] = { "Name", "ByteOrder", "CodecPart", "FieldName", "FieldProperty", "FieldIndex",
-                    "FieldType" };
+                    "FieldType", "DefaultValue" };
             XSSFSheet codecs_sheet = workbook.createSheet("codecs");
             int codecRowNum = 0;
             codecRowNum = setHeaderRow(codecs_sheet, codecRowNum, codecsHeader, workbook, style);
@@ -426,6 +416,8 @@ public class basicIdea {
                             codec_list.get(i).getCodecHeader().getHeaderFields().get(j).getFieldIndex());
                     row.createCell(counter + 6)
                             .setCellValue(codec_list.get(i).getCodecHeader().getHeaderFields().get(j).getType());
+                    row.createCell(counter + 7).setCellValue(
+                            codec_list.get(i).getCodecHeader().getHeaderFields().get(j).getDefaultValue());
 
                 }
                 // FOOTER FIELDS
@@ -444,6 +436,8 @@ public class basicIdea {
                             codec_list.get(i).getCodecFooter().getFooterFields().get(j).getFieldIndex());
                     row.createCell(counter + 6)
                             .setCellValue(codec_list.get(i).getCodecFooter().getFooterFields().get(j).getType());
+                    row.createCell(counter + 7).setCellValue(
+                            codec_list.get(i).getCodecFooter().getFooterFields().get(j).getDefaultValue());
 
                 }
 
@@ -461,14 +455,13 @@ public class basicIdea {
 
             }
 
-            // TODO: set autosized columns
+            // to set column size automatically
             int sheetNum = workbook.getNumberOfSheets();
             for (int i = 0; i < sheetNum; i++) {
                 setAutoSizedColumns(workbook.getSheetAt(i));
             }
 
             // data validation and dropdown list
-
             ArrayList<String> dataTypes = new ArrayList<String>();
             for (Primitives primitive : primitive_list) {
                 dataTypes.add(primitive.getName());
@@ -478,41 +471,37 @@ public class basicIdea {
                 dataTypes.add(array.getName());
             }
 
-            //String[] dataTypesArray = dataTypes.toArray(new String[0]);
-
-            // CellRangeAddressList addressList = new CellRangeAddressList(1, 67, 6, 6);
-            // to taget all the column rather than a range of cells
+            // to target all the column rather than a range of cells
             CellRangeAddressList addressList2 = new CellRangeAddressList(-1, -1, 6, 6);
-            // setDataValidation(codecs_sheet, addressList2, dataTypesArray);
-            // setDataValidation(codecs_sheet, addressList2, dataTypesArray);
 
-            setDataValidation1(primitives_sheet, getCellRangeAddress(primitiveHeader, "Format"),
+/*             setDataValidationWithList(primitives_sheet, getCellRangeAddress(primitiveHeader, "Format"),
                     getXsdList("XsdFormat"));
-            setDataValidation1(primitives_sheet, getCellRangeAddress(primitiveHeader, "Type"),
+            setDataValidationWithList(primitives_sheet, getCellRangeAddress(primitiveHeader, "Type"),
                     getXsdList("XsdPrimitiveType"));
 
-            setDataValidation1(arrays_sheet, getCellRangeAddress(arrayHeader, "ElementType"),
+            setDataValidationWithList(arrays_sheet, getCellRangeAddress(arrayHeader, "ElementType"),
                     getDataValidation(arrayTypes));
 
-            setDataValidation1(structures_sheet, getCellRangeAddress(structureHeader, "FieldType"),
+            setDataValidationWithList(structures_sheet, getCellRangeAddress(structureHeader, "FieldType"),
                     getDataValidation(structTypes));
-            setDataValidation1(codecs_sheet, getCellRangeAddress(codecsHeader, "FieldProperty"),
+            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader, "FieldProperty"),
                     getXsdList("XsdFieldProperty"));
             String[] part = { "HEADER", "FOOTER" };
-            setDataValidation1(codecs_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
+            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
                     getXsdList("XsdByteOrder"));
-            setDataValidation1(codecs_sheet, getCellRangeAddress(codecsHeader, "CodecPart"), part);
-            setDataValidation1(codecs_sheet, addressList2, getDataValidation(codecFieldType));
+            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader, "CodecPart"), part);
+            setDataValidationWithList(codecs_sheet, addressList2, getDataValidation(codecFieldType));
 
             String[] codecMessagePart = { "MESSAGES" };
-            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "ByteOrder"),
+            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "ByteOrder"),
                     getXsdList("XsdByteOrder"));
-            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecsHeader, "CodecPart"), codecMessagePart);
-            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
+            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecsHeader, "CodecPart"),
+                    codecMessagePart);
+            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
                     getXsdList("XsdByteOrder"));
 
-            setDataValidation1(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "MessageName"),
-                    getDataValidation(messageNames));
+            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "MessageName"),
+                    getDataValidation(messageNames)); */
 
             try {
                 FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
@@ -551,6 +540,8 @@ public class basicIdea {
         }
     }
 
+    // for the validation we have to select which column we want to validate,
+    // according to header it's creating an according range of cells
     public static CellRangeAddressList getCellRangeAddress(String[] headerRow, String columnName) {
         // get the index of a string in an array
         int index = 0;
@@ -560,14 +551,15 @@ public class basicIdea {
             }
         }
         // create a range of cells
+        // row values choosen as "-1" to taget out entirity of the column
         CellRangeAddressList addressList = new CellRangeAddressList(-1, -1, index, index);
         return addressList;
     }
 
-    // set header row per sheet
+    // For more definitive expedition header rows has been added to the excel sheet
     public static int setHeaderRow(XSSFSheet sheet, int rowNum, String[] header, XSSFWorkbook workbook,
             CellStyle style) {
-
+        style.setLocked(true);
         Row row = sheet.createRow(rowNum);
         for (int i = 0; i < header.length; i++) {
             row.createCell(i).setCellValue(header[i]);
@@ -577,6 +569,9 @@ public class basicIdea {
         return rowNum;
     }
 
+    // Some of the validation elements are coming from xsd file, since xsd is kind
+    // of an xml file and the lvl of the list is 3 lvl deep down only took the
+    // deepst element as argument
     public static String[] getXsdList(String nodeName) {
         String[] primitiveFormatList;
         try {
@@ -585,21 +580,25 @@ public class basicIdea {
                     nodeName);
             return primitiveFormatList;
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
 
-    public static void setDataValidation(XSSFSheet sheet, CellRangeAddressList addressList, String[] dropDownList) {
+    // These two methods are used to set data validation
+    // The reason that they are seperate functions is formula part is not
+    // comprehensive enough
+    // Some of the examples has been commented out in the function below
+    public static void setDataValidationWithFormula(XSSFSheet sheet, CellRangeAddressList addressList,
+            String[] dropDownList) {
 
         DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
-        // DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(dropDownList);
-        // create a data validation constraint with excel formula
-
-        // DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("$B$1:$B$" + (dropDownList.length + 1));
-        // DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("$A$2:$A$1048576");
-        // DataValidationConstraint constraint = validationHelper.createFormulaListConstraint("UNIQUE($A$2)");
+        // validationHelper.createFormulaListConstraint("$B$1:$B$" +
+        // (dropDownList.length + 1));
+        // DataValidationConstraint constraint =
+        // validationHelper.createFormulaListConstraint("$A$2:$A$1048576");
+        // DataValidationConstraint constraint =
+        // validationHelper.createFormulaListConstraint("UNIQUE($A$2)");
 
         DataValidationConstraint constraint = validationHelper
                 .createFormulaListConstraint("($A$2:$A$23)");
@@ -612,7 +611,8 @@ public class basicIdea {
 
     }
 
-    public static void setDataValidation1(XSSFSheet sheet, CellRangeAddressList addressList, String[] dropDownList) {
+    public static void setDataValidationWithList(XSSFSheet sheet, CellRangeAddressList addressList,
+            String[] dropDownList) {
 
         DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
         DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(dropDownList);

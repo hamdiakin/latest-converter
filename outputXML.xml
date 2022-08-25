@@ -2,12 +2,12 @@
 <TA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TA.xsd">
     
     <types>
-        <primitive byteOrder="byte" id="CB2" name="BYTE_CB2" size="8" type="0"/>
-        <primitive byteOrder="byte" id="BNR" name="BYTE" size="8" type="0"/>
-        <primitive byteOrder="int" id="BNR" name="UINT_8" size="8" type="0"/>
-        <primitive byteOrder="String" id="STR" name="STRING_10CHAR" size="0" type="10"/>
-        <primitive byteOrder="String" id="STR" name="STRING_VARSIZE" size="0" type="1"/>
-        <primitive byteOrder="char" id="CB2" name="CHAR" size="8" type="0"/>
+        <primitive format="CB2" name="BYTE_CB2" sizeInBits="8" sizeInBytes="0" type="byte"/>
+        <primitive format="BNR" name="BYTE" sizeInBits="8" sizeInBytes="0" type="byte"/>
+        <primitive format="BNR" name="UINT_8" sizeInBits="8" sizeInBytes="0" type="int"/>
+        <primitive format="STR" name="STRING_10CHAR" sizeInBits="0" sizeInBytes="10" type="String"/>
+        <primitive format="STR" name="STRING_VARSIZE" sizeInBits="0" sizeInBytes="1" type="String"/>
+        <primitive format="CB2" name="CHAR" sizeInBits="8" sizeInBytes="0" type="char"/>
         
         <structure name="STRUCT1">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
@@ -108,7 +108,7 @@
         
         <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PrePost_BigEnd">
             <header>
-                <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
+                <field defaultValue="{(byte)0x0A}" fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
                 <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
             </header>
             <footer>
@@ -208,7 +208,7 @@
         
         <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PreIdLen_BigEnd_HeaderArray">
             <header>
-                <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble123" type="PreambleNoConstSizeArray"/>
+                <field defaultValue="{(byte)0x0A, (byte)0x0B}" fieldIndex="0" fieldProperty="Preamble" name="msgPreamble123" type="PreambleNoConstSizeArray"/>
                 <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
                 <field fieldIndex="2" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
             </header>
