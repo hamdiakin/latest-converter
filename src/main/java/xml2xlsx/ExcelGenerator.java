@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,14 +32,21 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
 
-public class basicIdea {
+public class ExcelGenerator {
+    static ExecutorService executor = Executors.newFixedThreadPool(10);
+    /*
+     * static ExecutorService executorService = Executors.newFixedThreadPool(10);
+     * static ExecutorService executorService2 =
+     * Executors.newSingleThreadExecutor();
+     */
     private static final String FILE_NAME = "output.xlsx";
 
     // main method
     public static void main(String[] args) {
         // input path is selected as described in the assignment
-        String input_path = ".\\data-files\\typeTest.xml";
+        String input_path = ".\\data-files\\easyMessageTest.xml";
         // String input_path = ".\\ata.xm\l";
 
         File xmlFile = new File(input_path);
@@ -58,251 +67,32 @@ public class basicIdea {
             ArrayList<Primitives> primitive_list = new ArrayList<Primitives>();
             ArrayList<ArrayType> arrays_list = new ArrayList<ArrayType>();
             ArrayList<Structures> structure_list = new ArrayList<Structures>();
+
+            /*
+             * Runnable runnableTask = () -> {
+             * try {
+             * TimeUnit.MILLISECONDS.sleep(300);
+             * } catch (InterruptedException e) {
+             * e.printStackTrace();
+             * }
+             * };
+             */
+
             NodeList typeslist = doc.getElementsByTagName("types");
-            for (int i = 0; i < typeslist.getLength(); i++) {
-                Node p = typeslist.item(i);
-                // System.out.println(p.getNodeName());
-                if (p.getNodeType() == Node.ELEMENT_NODE) {
-                    Element type = (Element) p;
-                    // for primitives
-                    NodeList primitives = type.getElementsByTagName("primitive");
-                    for (int j = 0; j < primitives.getLength(); j++) {
-                        Node q = primitives.item(j);
-                        if (q.getNodeType() == Node.ELEMENT_NODE) {
-                            Element field = (Element) q;
-                            primitive_list.add(new Primitives(field.getAttribute("name"),
-                                    field.getAttribute("format"),
-                                    Integer.parseInt(field.getAttribute("sizeInBytes")),
-                                    Integer.parseInt(field.getAttribute("sizeInBits")),
-                                    field.getAttribute("type")));
+            // readXL4Types(typeslist, primitive_list, arrays_list, structure_list);
 
-                            // System.out.println(field.getAttribute("name"));
-                        }
-                    }
-
-                    // for arrays
-                    NodeList arrays = type.getElementsByTagName("array");
-                    for (int j = 0; j < arrays.getLength(); j++) {
-                        Node q = arrays.item(j);
-                        if (q.getNodeType() == Node.ELEMENT_NODE) {
-                            Element field = (Element) q;
-                            if (field.getAttribute("constantElementCount").length() > 0) {
-                                arrays_list.add(new ArrayType(field.getAttribute("name"),
-                                        field.getAttribute("elementType"),
-                                        Integer.parseInt(field.getAttribute("constantElementCount"))));
-                            } else {
-                                arrays_list.add(new ArrayType(field.getAttribute("name"),
-                                        field.getAttribute("elementType")));
-
-                            }
-                            // System.out.println(field.getAttribute("name"));
-                        }
-                    }
-
-                    NodeList structures = type.getElementsByTagName("structure");
-                    ArrayList<StructureFields> structureField_list = new ArrayList<StructureFields>();
-                    String name = "";
-                    for (int j = 0; j < structures.getLength(); j++) {
-                        Node q = structures.item(j);
-                        if (q.getNodeType() == Node.ELEMENT_NODE) {
-                            Element field = (Element) q;
-                            // System.out.println(field.getAttribute("name"));
-                            name = field.getAttribute("name");
-                            NodeList sField = field.getElementsByTagName("field");
-                            for (int k = 0; k < sField.getLength(); k++) {
-                                Node r = sField.item(k);
-                                if (r.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element sFields = (Element) r;
-                                    // System.out.println(sFields.getAttribute("name"));
-                                    if (sFields.getAttribute("elementCountField").length() > 0) {
-                                        structureField_list.add(new StructureFields(sFields.getAttribute("name"),
-                                                sFields.getAttribute("type"),
-                                                Integer.parseInt(sFields.getAttribute("fieldIndex")),
-                                                sFields.getAttribute("elementCountField")));
-                                    } else {
-                                        structureField_list.add(new StructureFields(sFields.getAttribute("name"),
-                                                sFields.getAttribute("type"),
-                                                Integer.parseInt(sFields.getAttribute("fieldIndex"))));
-                                    }
-                                }
-                            }
-
-                        }
-                        structure_list.add(new Structures(name, new ArrayList<>(structureField_list)));
-                        structureField_list.clear();
-                    }
-
-                }
-            }
+            readExcelForTypes(typeslist, primitive_list, arrays_list, structure_list);
 
             // for the messages list
             ArrayList<Messages> message_list = new ArrayList<Messages>();
             ArrayList<MessageFields> message_field_list = new ArrayList<MessageFields>();
-            String messageName = "";
-            String messageID = "";
             NodeList messageslist = doc.getElementsByTagName("messages");
-            for (int i = 0; i < messageslist.getLength(); i++) {
-                Node p = messageslist.item(i);
-                // System.out.println(p.getNodeName());
-                if (p.getNodeType() == Node.ELEMENT_NODE) {
-                    Element message = (Element) p;
-                    NodeList fields = message.getElementsByTagName("message");
-                    // for each message
-                    for (int j = 0; j < fields.getLength(); j++) {
-                        Node q = fields.item(j);
-                        if (q.getNodeType() == Node.ELEMENT_NODE) {
-                            Element field = (Element) q;
-                            // System.out.println(field.getAttribute("id"));
-                            messageName = field.getAttribute("name");
-                            messageID = field.getAttribute("id");
-
-                            NodeList messageField = field.getElementsByTagName("field");
-                            for (int k = 0; k < messageField.getLength(); k++) {
-                                Node r = messageField.item(k);
-                                if (r.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element messageFields = (Element) r;
-                                    if (messageFields.getAttribute("elementCountField").length() > 0) {
-                                        message_field_list.add(new MessageFields(messageFields.getAttribute("name"),
-                                                Integer.parseInt(messageFields.getAttribute("fieldIndex")),
-                                                messageFields.getAttribute("type"),
-                                                messageFields.getAttribute("elementCountField")));
-                                    } else {
-                                        message_field_list.add(new MessageFields(messageFields.getAttribute("name"),
-                                                Integer.parseInt(messageFields.getAttribute("fieldIndex")),
-                                                messageFields.getAttribute("type")));
-                                    }
-
-                                }
-                            }
-                        }
-                        // TODO: message list is ignoring message eleven cuz it doesnt have any fields
-                        message_list.add(new Messages(messageName, Integer.parseInt(messageID),
-                                new ArrayList<>(message_field_list)));
-                        message_field_list.clear();
-                    }
-                }
-
-            }
+            readExcelForMessages(messageslist, message_list, message_field_list);
 
             // for the codec list
             ArrayList<Codecs> codec_list = new ArrayList<Codecs>();
-
             NodeList codecslist = doc.getElementsByTagName("codecs");
-            for (int i = 0; i < codecslist.getLength(); i++) {
-
-                Node p = codecslist.item(i);
-                // System.out.println(p.getNodeName());
-                // for the messages of the each codec
-                if (p.getNodeType() == Node.ELEMENT_NODE) {
-                    Element codec = (Element) p;
-
-                    NodeList fields_for_codec = codec.getElementsByTagName("codec");
-                    // System.out.println(codec.getAttribute("name"));
-                    // for each codec
-                    for (int j = 0; j < fields_for_codec.getLength(); j++) {
-                        String codecName = "";
-                        String byteOrder = "";
-                        ArrayList<CodecMessage> codecMessages = new ArrayList<CodecMessage>();
-                        // for codec fields
-                        String fieldName = "";
-                        String fieldProperty = "";
-                        String fieldIndex = "";
-                        String type = "";
-                        String defaultValue = "";
-                        // footer field list
-                        ArrayList<CodecFields> footerFields = new ArrayList<CodecFields>();
-                        // header field list
-                        ArrayList<CodecFields> headerFields = new ArrayList<CodecFields>();
-                        // for codec messages
-                        String codecMessageName = "";
-
-                        Node q = fields_for_codec.item(j);
-
-                        if (q.getNodeType() == Node.ELEMENT_NODE) {
-                            Element field = (Element) q;
-
-                            NodeList header_for_codec = field.getElementsByTagName("header");
-                            NodeList footer_for_codec = field.getElementsByTagName("footer");
-                            NodeList messages_for_codec = field.getElementsByTagName("message");
-
-                            codecName = field.getAttribute("name");
-                            byteOrder = field.getAttribute("byteOrder");
-
-                            // This particular code snippet is dedicated for header fields per codec
-                            for (int k = 0; k < header_for_codec.getLength(); k++) {
-                                Node r = header_for_codec.item(k);
-                                if (r.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element header = (Element) r;
-                                    NodeList codecFieldsList = header.getElementsByTagName("field");
-                                    for (int l = 0; l < codecFieldsList.getLength(); l++) {
-                                        Node z = codecFieldsList.item(l);
-                                        if (z.getNodeType() == Node.ELEMENT_NODE) {
-                                            Element codecFieldss = (Element) z;
-                                            // System.out.println(codecFieldss.getAttribute("name"));
-                                            fieldName = codecFieldss.getAttribute("name");
-                                            fieldProperty = codecFieldss.getAttribute("fieldProperty");
-                                            fieldIndex = codecFieldss.getAttribute("fieldIndex");
-                                            type = codecFieldss.getAttribute("type");
-
-                                            if (codecFieldss.getAttribute("defaultValue").length() > 0) {
-                                                defaultValue = codecFieldss.getAttribute("defaultValue");
-                                                headerFields
-                                                        .add(new CodecFields(fieldName, fieldProperty,
-                                                                Integer.parseInt(fieldIndex), type, defaultValue));
-                                            } else
-                                                headerFields
-                                                        .add(new CodecFields(fieldName, fieldProperty,
-                                                                Integer.parseInt(fieldIndex), type));
-
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-                            // This particular code snippet is dedicated for footer fields per codec
-                            for (int k = 0; k < footer_for_codec.getLength(); k++) {
-                                Node r = footer_for_codec.item(k);
-                                if (r.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element header = (Element) r;
-                                    NodeList codecFieldsList = header.getElementsByTagName("field");
-                                    for (int l = 0; l < codecFieldsList.getLength(); l++) {
-                                        Node z = codecFieldsList.item(l);
-                                        if (z.getNodeType() == Node.ELEMENT_NODE) {
-                                            Element codecFieldss = (Element) z;
-                                            // System.out.println(codecFieldss.getAttribute("name"));
-                                            fieldName = codecFieldss.getAttribute("name");
-                                            fieldProperty = codecFieldss.getAttribute("fieldProperty");
-                                            fieldIndex = codecFieldss.getAttribute("fieldIndex");
-                                            type = codecFieldss.getAttribute("type");
-                                            footerFields
-                                                    .add(new CodecFields(fieldName, fieldProperty,
-                                                            Integer.parseInt(fieldIndex),
-                                                            type));
-                                        }
-
-                                    }
-
-                                }
-                            }
-                            // This particular code snippet is dedicated for messages per codec
-                            for (int k = 0; k < messages_for_codec.getLength(); k++) {
-                                Node r = messages_for_codec.item(k);
-                                if (r.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element message = (Element) r;
-                                    codecMessageName = message.getAttribute("name");
-                                    codecMessages.add(new CodecMessage(codecMessageName));
-                                }
-                            }
-
-                            codec_list.add(new Codecs(codecName, byteOrder, new CodecHeader(headerFields),
-                                    new CodecFooter(footerFields), codecMessages));
-                        }
-                    }
-
-                }
-            }
+            readExcelForCodecs(codecslist, codec_list);
 
             // cell style for bold text
             CellStyle style = workbook.createCellStyle();
@@ -317,6 +107,13 @@ public class basicIdea {
             int rowNum = 0;
             rowNum = setHeaderRow(primitives_sheet, rowNum, primitiveHeader, workbook, style);
 
+            /*
+             * executor.execute(new Runnable() {
+             * public void run() {
+             * System.out.println("Asynchronous task");
+             * }
+             * });
+             */
             for (int i = 0; i < primitive_list.size(); i++) {
                 Row row = primitives_sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(primitive_list.get(i).getName());
@@ -473,35 +270,49 @@ public class basicIdea {
 
             // to target all the column rather than a range of cells
             CellRangeAddressList addressList2 = new CellRangeAddressList(-1, -1, 6, 6);
+           /*  XSSFSheet sheetList[] = { primitives_sheet, structures_sheet, messages_sheet, codecs_sheet,
+                    codec_messages_sheet }; */
 
-/*             setDataValidationWithList(primitives_sheet, getCellRangeAddress(primitiveHeader, "Format"),
+            setDataValidationWithList(primitives_sheet,
+                    getCellRangeAddress(primitiveHeader, "Format"),
                     getXsdList("XsdFormat"));
-            setDataValidationWithList(primitives_sheet, getCellRangeAddress(primitiveHeader, "Type"),
+            setDataValidationWithList(primitives_sheet,
+                    getCellRangeAddress(primitiveHeader, "Type"),
                     getXsdList("XsdPrimitiveType"));
 
-            setDataValidationWithList(arrays_sheet, getCellRangeAddress(arrayHeader, "ElementType"),
+            setDataValidationWithList(arrays_sheet, getCellRangeAddress(arrayHeader,
+                    "ElementType"),
                     getDataValidation(arrayTypes));
 
-            setDataValidationWithList(structures_sheet, getCellRangeAddress(structureHeader, "FieldType"),
+            setDataValidationWithList(structures_sheet,
+                    getCellRangeAddress(structureHeader, "FieldType"),
                     getDataValidation(structTypes));
-            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader, "FieldProperty"),
+            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader,
+                    "FieldProperty"),
                     getXsdList("XsdFieldProperty"));
             String[] part = { "HEADER", "FOOTER" };
-            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
+            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader,
+                    "ByteOrder"),
                     getXsdList("XsdByteOrder"));
-            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader, "CodecPart"), part);
-            setDataValidationWithList(codecs_sheet, addressList2, getDataValidation(codecFieldType));
+            setDataValidationWithList(codecs_sheet, getCellRangeAddress(codecsHeader,
+                    "CodecPart"), part);
+            setDataValidationWithList(codecs_sheet, addressList2,
+                    getDataValidation(codecFieldType));
 
             String[] codecMessagePart = { "MESSAGES" };
-            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "ByteOrder"),
+            setDataValidationWithList(codec_messages_sheet,
+                    getCellRangeAddress(codecMessagesHeader, "ByteOrder"),
                     getXsdList("XsdByteOrder"));
-            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecsHeader, "CodecPart"),
+            setDataValidationWithList(codec_messages_sheet,
+                    getCellRangeAddress(codecsHeader, "CodecPart"),
                     codecMessagePart);
-            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecsHeader, "ByteOrder"),
+            setDataValidationWithList(codec_messages_sheet,
+                    getCellRangeAddress(codecsHeader, "ByteOrder"),
                     getXsdList("XsdByteOrder"));
 
-            setDataValidationWithList(codec_messages_sheet, getCellRangeAddress(codecMessagesHeader, "MessageName"),
-                    getDataValidation(messageNames)); */
+            setDataValidationWithList(codec_messages_sheet,
+                    getCellRangeAddress(codecMessagesHeader, "MessageName"),
+                    getDataValidation(messageNames));
 
             try {
                 FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
@@ -559,12 +370,13 @@ public class basicIdea {
     // For more definitive expedition header rows has been added to the excel sheet
     public static int setHeaderRow(XSSFSheet sheet, int rowNum, String[] header, XSSFWorkbook workbook,
             CellStyle style) {
-        style.setLocked(true);
         Row row = sheet.createRow(rowNum);
         for (int i = 0; i < header.length; i++) {
             row.createCell(i).setCellValue(header[i]);
             row.getCell(i).setCellStyle(style);
+            // row.getCell(i).getCellStyle().setLocked(true);
         }
+        sheet.createFreezePane(0, 1);
         rowNum += 1;
         return rowNum;
     }
@@ -575,7 +387,7 @@ public class basicIdea {
     public static String[] getXsdList(String nodeName) {
         String[] primitiveFormatList;
         try {
-            primitiveFormatList = xsdReader.documentReader(".\\data-files\\TA.xsd", "xsd:simpleType",
+            primitiveFormatList = XsdParser.documentReader(".\\data-files\\TA.xsd", "xsd:simpleType",
                     "xsd:restriction", "xsd:enumeration",
                     nodeName);
             return primitiveFormatList;
@@ -624,4 +436,253 @@ public class basicIdea {
 
     }
 
+    public static void readExcelForTypes(NodeList typeslist, ArrayList<Primitives> primitive_list,
+            ArrayList<ArrayType> arrays_list, ArrayList<Structures> structure_list) {
+
+        for (int i = 0; i < typeslist.getLength(); i++) {
+            Node p = typeslist.item(i);
+            // System.out.println(p.getNodeName());
+            if (p.getNodeType() == Node.ELEMENT_NODE) {
+                Element type = (Element) p;
+                // for primitives
+                NodeList primitives = type.getElementsByTagName("primitive");
+                for (int j = 0; j < primitives.getLength(); j++) {
+                    Node q = primitives.item(j);
+                    if (q.getNodeType() == Node.ELEMENT_NODE) {
+                        Element field = (Element) q;
+                        primitive_list.add(new Primitives(field.getAttribute("name"),
+                                field.getAttribute("format"),
+                                Integer.parseInt(field.getAttribute("sizeInBytes")),
+                                Integer.parseInt(field.getAttribute("sizeInBits")),
+                                field.getAttribute("type")));
+
+                        // System.out.println(field.getAttribute("name"));
+                    }
+                }
+
+                // for arrays
+                NodeList arrays = type.getElementsByTagName("array");
+                for (int j = 0; j < arrays.getLength(); j++) {
+                    Node q = arrays.item(j);
+                    if (q.getNodeType() == Node.ELEMENT_NODE) {
+                        Element field = (Element) q;
+                        if (field.getAttribute("constantElementCount").length() > 0) {
+                            arrays_list.add(new ArrayType(field.getAttribute("name"),
+                                    field.getAttribute("elementType"),
+                                    Integer.parseInt(field.getAttribute("constantElementCount"))));
+                        } else {
+                            arrays_list.add(new ArrayType(field.getAttribute("name"),
+                                    field.getAttribute("elementType")));
+
+                        }
+                        // System.out.println(field.getAttribute("name"));
+                    }
+                }
+
+                NodeList structures = type.getElementsByTagName("structure");
+                ArrayList<StructureFields> structureField_list = new ArrayList<StructureFields>();
+                String name = "";
+                for (int j = 0; j < structures.getLength(); j++) {
+                    Node q = structures.item(j);
+                    if (q.getNodeType() == Node.ELEMENT_NODE) {
+                        Element field = (Element) q;
+                        // System.out.println(field.getAttribute("name"));
+                        name = field.getAttribute("name");
+                        NodeList sField = field.getElementsByTagName("field");
+                        for (int k = 0; k < sField.getLength(); k++) {
+                            Node r = sField.item(k);
+                            if (r.getNodeType() == Node.ELEMENT_NODE) {
+                                Element sFields = (Element) r;
+                                // System.out.println(sFields.getAttribute("name"));
+                                if (sFields.getAttribute("elementCountField").length() > 0) {
+                                    structureField_list.add(new StructureFields(sFields.getAttribute("name"),
+                                            sFields.getAttribute("type"),
+                                            Integer.parseInt(sFields.getAttribute("fieldIndex")),
+                                            sFields.getAttribute("elementCountField")));
+                                } else {
+                                    structureField_list.add(new StructureFields(sFields.getAttribute("name"),
+                                            sFields.getAttribute("type"),
+                                            Integer.parseInt(sFields.getAttribute("fieldIndex"))));
+                                }
+                            }
+                        }
+
+                    }
+                    structure_list.add(new Structures(name, new ArrayList<>(structureField_list)));
+                    structureField_list.clear();
+                }
+
+            }
+        }
+    }
+
+    public static void readExcelForMessages(NodeList messageslist, ArrayList<Messages> message_list,
+            ArrayList<MessageFields> message_field_list) {
+        String messageName = "";
+        String messageID = "";
+
+        for (int i = 0; i < messageslist.getLength(); i++) {
+            Node p = messageslist.item(i);
+            // System.out.println(p.getNodeName());
+            if (p.getNodeType() == Node.ELEMENT_NODE) {
+                Element message = (Element) p;
+                NodeList fields = message.getElementsByTagName("message");
+                // for each message
+                for (int j = 0; j < fields.getLength(); j++) {
+                    Node q = fields.item(j);
+                    if (q.getNodeType() == Node.ELEMENT_NODE) {
+                        Element field = (Element) q;
+                        // System.out.println(field.getAttribute("id"));
+                        messageName = field.getAttribute("name");
+                        messageID = field.getAttribute("id");
+
+                        NodeList messageField = field.getElementsByTagName("field");
+                        for (int k = 0; k < messageField.getLength(); k++) {
+                            Node r = messageField.item(k);
+                            if (r.getNodeType() == Node.ELEMENT_NODE) {
+                                Element messageFields = (Element) r;
+                                if (messageFields.getAttribute("elementCountField").length() > 0) {
+                                    message_field_list.add(new MessageFields(messageFields.getAttribute("name"),
+                                            Integer.parseInt(messageFields.getAttribute("fieldIndex")),
+                                            messageFields.getAttribute("type"),
+                                            messageFields.getAttribute("elementCountField")));
+                                } else {
+                                    message_field_list.add(new MessageFields(messageFields.getAttribute("name"),
+                                            Integer.parseInt(messageFields.getAttribute("fieldIndex")),
+                                            messageFields.getAttribute("type")));
+                                }
+
+                            }
+                        }
+                    }
+                    // TODO: message list is ignoring message eleven cuz it doesnt have any fields
+                    message_list.add(new Messages(messageName, Integer.parseInt(messageID),
+                            new ArrayList<>(message_field_list)));
+                    message_field_list.clear();
+                }
+            }
+
+        }
+    }
+
+    public static void readExcelForCodecs(NodeList codecslist, ArrayList<Codecs> codec_list) {
+        for (int i = 0; i < codecslist.getLength(); i++) {
+
+            Node p = codecslist.item(i);
+            // System.out.println(p.getNodeName());
+            // for the messages of the each codec
+            if (p.getNodeType() == Node.ELEMENT_NODE) {
+                Element codec = (Element) p;
+
+                NodeList fields_for_codec = codec.getElementsByTagName("codec");
+                // System.out.println(codec.getAttribute("name"));
+                // for each codec
+                for (int j = 0; j < fields_for_codec.getLength(); j++) {
+                    String codecName = "";
+                    String byteOrder = "";
+                    ArrayList<CodecMessage> codecMessages = new ArrayList<CodecMessage>();
+                    // for codec fields
+                    String fieldName = "";
+                    String fieldProperty = "";
+                    String fieldIndex = "";
+                    String type = "";
+                    String defaultValue = "";
+                    // footer field list
+                    ArrayList<CodecFields> footerFields = new ArrayList<CodecFields>();
+                    // header field list
+                    ArrayList<CodecFields> headerFields = new ArrayList<CodecFields>();
+                    // for codec messages
+                    String codecMessageName = "";
+
+                    Node q = fields_for_codec.item(j);
+
+                    if (q.getNodeType() == Node.ELEMENT_NODE) {
+                        Element field = (Element) q;
+
+                        NodeList header_for_codec = field.getElementsByTagName("header");
+                        NodeList footer_for_codec = field.getElementsByTagName("footer");
+                        NodeList messages_for_codec = field.getElementsByTagName("message");
+
+                        codecName = field.getAttribute("name");
+                        byteOrder = field.getAttribute("byteOrder");
+
+                        // This particular code snippet is dedicated for header fields per codec
+                        for (int k = 0; k < header_for_codec.getLength(); k++) {
+                            Node r = header_for_codec.item(k);
+                            if (r.getNodeType() == Node.ELEMENT_NODE) {
+                                Element header = (Element) r;
+                                NodeList codecFieldsList = header.getElementsByTagName("field");
+                                for (int l = 0; l < codecFieldsList.getLength(); l++) {
+                                    Node z = codecFieldsList.item(l);
+                                    if (z.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element codecFieldss = (Element) z;
+                                        // System.out.println(codecFieldss.getAttribute("name"));
+                                        fieldName = codecFieldss.getAttribute("name");
+                                        fieldProperty = codecFieldss.getAttribute("fieldProperty");
+                                        fieldIndex = codecFieldss.getAttribute("fieldIndex");
+                                        type = codecFieldss.getAttribute("type");
+
+                                        if (codecFieldss.getAttribute("defaultValue").length() > 0) {
+                                            defaultValue = codecFieldss.getAttribute("defaultValue");
+                                            headerFields
+                                                    .add(new CodecFields(fieldName, fieldProperty,
+                                                            Integer.parseInt(fieldIndex), type, defaultValue));
+                                        } else
+                                            headerFields
+                                                    .add(new CodecFields(fieldName, fieldProperty,
+                                                            Integer.parseInt(fieldIndex), type));
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                        // This particular code snippet is dedicated for footer fields per codec
+                        for (int k = 0; k < footer_for_codec.getLength(); k++) {
+                            Node r = footer_for_codec.item(k);
+                            if (r.getNodeType() == Node.ELEMENT_NODE) {
+                                Element header = (Element) r;
+                                NodeList codecFieldsList = header.getElementsByTagName("field");
+                                for (int l = 0; l < codecFieldsList.getLength(); l++) {
+                                    Node z = codecFieldsList.item(l);
+                                    if (z.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element codecFieldss = (Element) z;
+                                        // System.out.println(codecFieldss.getAttribute("name"));
+                                        fieldName = codecFieldss.getAttribute("name");
+                                        fieldProperty = codecFieldss.getAttribute("fieldProperty");
+                                        fieldIndex = codecFieldss.getAttribute("fieldIndex");
+                                        type = codecFieldss.getAttribute("type");
+                                        footerFields
+                                                .add(new CodecFields(fieldName, fieldProperty,
+                                                        Integer.parseInt(fieldIndex),
+                                                        type));
+                                    }
+
+                                }
+
+                            }
+                        }
+                        // This particular code snippet is dedicated for messages per codec
+                        for (int k = 0; k < messages_for_codec.getLength(); k++) {
+                            Node r = messages_for_codec.item(k);
+                            if (r.getNodeType() == Node.ELEMENT_NODE) {
+                                Element message = (Element) r;
+                                codecMessageName = message.getAttribute("name");
+                                codecMessages.add(new CodecMessage(codecMessageName));
+                            }
+                        }
+
+                        codec_list.add(new Codecs(codecName, byteOrder, new CodecHeader(headerFields),
+                                new CodecFooter(footerFields), codecMessages));
+                    }
+                }
+
+            }
+        }
+    }
+
+    public static void setDataValidationWithList(XSSFSheet sheetList[]) {
+    }
 }

@@ -8,15 +8,20 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/output.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/outputXML.xml" beforeDir="false" afterPath="$PROJECT_DIR$/outputXML.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecFields.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xlsx2xml/basicIdea.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xml2xlsx/formXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xlsx2xml/formXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xml2xlsx/basicIdea.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xml2xlsx/xsdReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xml2xlsx/xsdReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFields.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFields.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFooter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFooter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/CodecHeader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/CodecHeader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/xlsx2xml/basicIdea.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/xml2xlsx/formXML.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/ArrayType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/ArrayType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/CodecMessage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/CodecMessage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/Codecs.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/Codecs.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/MessageFields.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/MessageFields.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/Messages.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/Messages.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/Primitives.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/Primitives.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/StructureFields.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/StructureFields.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/Structures.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/Structures.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/xml2xlsx/basicIdea.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/xml2xlsx/xsdReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/xml2xlsx/xsdReader.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,14 +42,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/stj.hakin/Desktop/latest-converter"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/stj.hakin/Desktop/latest-converter&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

@@ -2,94 +2,477 @@
 <TA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TA.xsd">
     
     <types>
-        <primitive format="CB2" name="BYTE_CB2" sizeInBits="8" sizeInBytes="0" type="byte"/>
-        <primitive format="BNR" name="BYTE" sizeInBits="8" sizeInBytes="0" type="byte"/>
-        <primitive format="BNR" name="UINT_8" sizeInBits="8" sizeInBytes="0" type="int"/>
-        <primitive format="STR" name="STRING_10CHAR" sizeInBits="0" sizeInBytes="10" type="String"/>
-        <primitive format="STR" name="STRING_VARSIZE" sizeInBits="0" sizeInBytes="1" type="String"/>
-        <primitive format="CB2" name="CHAR" sizeInBits="8" sizeInBytes="0" type="char"/>
-        
-        <structure name="STRUCT1">
-            <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountStructureField="field0" fieldIndex="1" name="field1" type="UINT_8_Array"/>
-        </structure>
-        
-        <arrayType constantElementCount="1" elementType="BYTE" name="PrePostAmbleArray"/>
-        <arrayType constantElementCount="2" elementType="BYTE" name="CheckSumArray"/>
-        <arrayType elementType="BYTE_CB2" name="CharArray"/>
-        <arrayType elementType="UINT_8" name="UINT_8_Array"/>
-        <arrayType constantElementCount="3" elementType="UINT_8" name="UINT_8_Array_Len3"/>
-        <arrayType elementType="STRUCT1" name="STRUCT1_Array_VarSize"/>
-        <arrayType constantElementCount="3" elementType="STRUCT1" name="STRUCT1_Array_ConstSize3"/>
-        <arrayType elementType="CHAR" name="CharTypeArray"/>
-        <arrayType elementType="BYTE" name="PreambleNoConstSizeArray"/>
-    </types>
+
+
+
+</types>
     
     <messages>
         <message id="1" name="Message1">
-            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_2"/>
+            <field fieldIndex="1" name="field1" type="UINT_26"/>
+            <field fieldIndex="2" name="field2" type="UINT_4"/>
         </message>
         
         <message id="2" name="Message2">
-            <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field fieldIndex="1" name="field1" type="UINT_8"/>
-            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_2"/>
+            <field fieldIndex="1" name="field1" type="UINT_7"/>
+            <field fieldIndex="2" name="field2" type="ULONG_42"/>
+            <field fieldIndex="3" name="field3" type="UINT_1"/>
+            <field fieldIndex="4" name="field4" type="UINT_5"/>
+            <field fieldIndex="5" name="field5" type="UINT_7"/>
         </message>
         
         <message id="3" name="Message3">
-            <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field fieldIndex="1" name="field1" type="UINT_8"/>
-            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="BOOLEAN_1"/>
+            <field fieldIndex="1" name="field1" type="BOOLEAN_1"/>
+            <field fieldIndex="2" name="field2" type="BOOLEAN_1"/>
+            <field fieldIndex="3" name="field3" type="BOOLEAN_1"/>
+            <field fieldIndex="4" name="field4" type="BOOLEAN_1"/>
+            <field fieldIndex="5" name="field5" type="BOOLEAN_1"/>
+            <field fieldIndex="6" name="field6" type="BOOLEAN_1"/>
+            <field fieldIndex="7" name="field7" type="BOOLEAN_1"/>
+            <field fieldIndex="8" name="field8" type="BOOLEAN_1"/>
+            <field fieldIndex="9" name="field9" type="BOOLEAN_1"/>
         </message>
         
         <message id="4" name="Message4">
+            <field fieldIndex="0" name="field0" type="UINT_5"/>
+            <field fieldIndex="1" name="field1" type="UINT_4"/>
+            <field fieldIndex="2" name="field2" type="UINT_12"/>
+            <field fieldIndex="3" name="field3" type="UINT_5"/>
+            <field fieldIndex="4" name="field4" type="UINT_3"/>
+            <field fieldIndex="5" name="field5" type="UINT_3"/>
+        </message>
+        
+        <message id="5" name="Message5">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
             <field fieldIndex="1" name="field1" type="UINT_8"/>
             <field fieldIndex="2" name="field2" type="UINT_8"/>
             <field fieldIndex="3" name="field3" type="UINT_8"/>
         </message>
         
-        <message id="5" name="Message5">
-            <field fieldIndex="0" name="field0" type="STRING_10CHAR"/>
-            <field fieldIndex="1" name="field1" type="STRING_10CHAR"/>
-            <field fieldIndex="2" name="field2" type="STRING_10CHAR"/>
-            <field fieldIndex="3" name="field3" type="STRING_10CHAR"/>
-        </message>
-        
         <message id="6" name="Message6">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountMessageField="field0" fieldIndex="1" name="field1" type="CharArray"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="3" name="field3" type="UINT_16"/>
         </message>
         
         <message id="7" name="Message7">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field elementCountMessageField="field0" fieldIndex="1" name="field1" type="STRUCT1_Array_VarSize"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field elementCountMessageField="##field1## + (##field0## / 2)" fieldIndex="2" name="field2" type="Array1"/>
         </message>
         
         <message id="8" name="Message8">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
-            <field fieldIndex="1" name="field1" type="STRUCT1_Array_ConstSize3"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="Structure1"/>
         </message>
         
         <message id="9" name="Message9">
-            <field fieldIndex="0" name="field0" type="UINT_8_Array"/>
+            <field fieldIndex="0" name="field1" type="UINT_8"/>
+            <field fieldIndex="1" name="field0" type="UINT_8"/>
+            <field fieldIndex="2" name="field3" type="UINT_8"/>
+            <field fieldIndex="3" name="field2" type="UINT_8"/>
         </message>
         
         <message id="10" name="Message10">
-            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="0" name="field0" type="UINT_2"/>
+            <field fieldIndex="1" name="field1" type="UINT_7"/>
+            <field fieldIndex="2" name="field2" type="ULONG_63"/>
+            <field fieldIndex="3" name="field3" type="UINT_1"/>
+            <field fieldIndex="4" name="field4" type="UINT_5"/>
+            <field fieldIndex="5" name="field5" type="UINT_7"/>
+            <field fieldIndex="6" name="field6" type="UINT_3"/>
+            <field fieldIndex="7" name="field7" type="UINT_8"/>
+        </message>
+        
+        <message id="11" name="Message11">
+            <field fieldIndex="0" name="field0" type="STRING_80"/>
         </message>
         
         <message id="12" name="Message12">
+            <field fieldIndex="0" name="field0" type="INT_8"/>
+            <field fieldIndex="1" name="field1" type="INT_8"/>
+            <field fieldIndex="2" name="field2" type="INT_3"/>
+            <field fieldIndex="3" name="field3" type="INT_7"/>
+            <field fieldIndex="4" name="field4" type="INT_6"/>
+        </message>
+        
+        <message id="13" name="Message13">
             <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="3" name="field3" type="UINT_8"/>
+            <field fieldIndex="4" name="field4" type="UINT_8"/>
+            <field fieldIndex="5" name="field5" type="UINT_8"/>
+            <field fieldIndex="6" name="field6" type="UINT_8"/>
+            <field fieldIndex="7" name="field7" type="CB2_SHORT_16"/>
+        </message>
+        
+        <message id="14" name="Message14">
+            <field fieldIndex="0" name="field0" type="UINT_16"/>
+            <field fieldIndex="1" name="field1" type="ULONG_63"/>
+            <field fieldIndex="2" name="field2" type="BOOLEAN_1"/>
+        </message>
+        
+        <message id="15" name="Message15">
+            <field fieldIndex="0" name="field0" type="UINT_16"/>
+            <field fieldIndex="1" name="field1" type="BOOLEAN_1"/>
+            <field fieldIndex="2" name="field2" type="ULONG_63"/>
+        </message>
+        
+        <message id="16" name="Message16">
+            <field fieldIndex="0" name="field0" type="UINT_16"/>
+            <field fieldIndex="1" name="field1" type="ULONG_63"/>
+        </message>
+        
+        <message id="17" name="Message17">
+            <field fieldIndex="0" name="field0" type="ULONG_63"/>
+            <field fieldIndex="1" name="field1" type="UINT_5"/>
+        </message>
+        
+        <message id="18" name="Message18">
+            <field fieldIndex="0" name="field0" type="UINT_5"/>
+        </message>
+        
+        <message id="19" name="Message19">
+            <field fieldIndex="0" name="field0" type="UINT_5"/>
+            <field fieldIndex="1" name="field1" type="UINT_5"/>
+            <field fieldIndex="2" name="field2" type="UINT_5"/>
+            <field fieldIndex="3" name="field3" type="UINT_5"/>
+            <field fieldIndex="4" name="field4" type="UINT_5"/>
+        </message>
+        
+        <message id="20" name="Message20">
+            <field fieldIndex="0" name="field0" type="ULONG_44"/>
+            <field fieldIndex="1" name="field1" type="ULONG_50"/>
+            <field fieldIndex="2" name="field2" type="ULONG_34"/>
+        </message>
+        
+        <message id="21" name="Message21">
+            <field fieldIndex="0" name="field0" type="ULONG_50"/>
+            <field fieldIndex="1" name="field1" type="ULONG_50"/>
+            <field fieldIndex="2" name="field2" type="ULONG_50"/>
+        </message>
+        
+        <message id="22" name="Message22">
+            <field fieldIndex="0" name="field0" type="LONG_CB2_50"/>
+            <field fieldIndex="1" name="field1" type="LONG_CB2_50"/>
+            <field fieldIndex="2" name="field2" type="LONG_CB2_50"/>
+        </message>
+        
+        <message id="23" name="Message23">
+            <field fieldIndex="0" name="field0" type="UINT_4"/>
+            <field fieldIndex="1" name="field1" type="UINT_4"/>
+        </message>
+        
+        <message id="24" name="Message24">
+            <field fieldIndex="0" name="field0" type="DOUBLE_4_R"/>
+            <field fieldIndex="1" name="field1" type="DOUBLE_4_R"/>
+            <field fieldIndex="2" name="field2" type="DOUBLE_4_R"/>
+            <field fieldIndex="3" name="field3" type="DOUBLE_4_R"/>
+            <field fieldIndex="4" name="field4" type="DOUBLE_4_R"/>
+            <field fieldIndex="5" name="field5" type="DOUBLE_4_R"/>
+            <field fieldIndex="6" name="field6" type="DOUBLE_4_R"/>
+            <field fieldIndex="7" name="field7" type="DOUBLE_4_R"/>
+            <field fieldIndex="8" name="field8" type="DOUBLE_4_R"/>
+            <field fieldIndex="9" name="field9" type="DOUBLE_4_R"/>
+            <field fieldIndex="10" name="field10" type="DOUBLE_4_R"/>
+            <field fieldIndex="11" name="field11" type="DOUBLE_4_R"/>
+            <field fieldIndex="12" name="field12" type="DOUBLE_4_R"/>
+            <field fieldIndex="13" name="field13" type="DOUBLE_4_R"/>
+            <field fieldIndex="14" name="field14" type="DOUBLE_4_R"/>
+            <field fieldIndex="15" name="field15" type="DOUBLE_4_R"/>
+        </message>
+        
+        <message id="25" name="Message25">
+            <field fieldIndex="0" name="field0" type="UDOUBLE_4_R"/>
+            <field fieldIndex="1" name="field1" type="UDOUBLE_4_R"/>
+            <field fieldIndex="2" name="field2" type="UDOUBLE_4_R"/>
+            <field fieldIndex="3" name="field3" type="UDOUBLE_4_R"/>
+            <field fieldIndex="4" name="field4" type="UDOUBLE_4_R"/>
+            <field fieldIndex="5" name="field5" type="UDOUBLE_4_R"/>
+            <field fieldIndex="6" name="field6" type="UDOUBLE_4_R"/>
+            <field fieldIndex="7" name="field7" type="UDOUBLE_4_R"/>
+            <field fieldIndex="8" name="field8" type="UDOUBLE_4_R"/>
+            <field fieldIndex="9" name="field9" type="UDOUBLE_4_R"/>
+            <field fieldIndex="10" name="field10" type="UDOUBLE_4_R"/>
+            <field fieldIndex="11" name="field11" type="UDOUBLE_4_R"/>
+            <field fieldIndex="12" name="field12" type="UDOUBLE_4_R"/>
+            <field fieldIndex="13" name="field13" type="UDOUBLE_4_R"/>
+            <field fieldIndex="14" name="field14" type="UDOUBLE_4_R"/>
+            <field fieldIndex="15" name="field15" type="UDOUBLE_4_R"/>
+        </message>
+        
+        <message id="26" name="Message26">
+            <field fieldIndex="0" name="field0" type="CB2_INT_4"/>
+            <field fieldIndex="1" name="field1" type="CB2_INT_4"/>
+        </message>
+        
+        <message id="27" name="Message27">
+            <field fieldIndex="0" name="field0" type="CB2_LNG_4"/>
+            <field fieldIndex="1" name="field1" type="CB2_LNG_4"/>
+        </message>
+        
+        <message id="28" name="Message28">
+            <field fieldIndex="0" name="field0" type="Array1"/>
+            <field fieldIndex="1" name="field1" type="Array1"/>
+        </message>
+        
+        <message id="29" name="Message29">
+            <field fieldIndex="0" name="field0" type="IEEEDOUBLE"/>
+            <field fieldIndex="1" name="field1" type="IEEEFLOAT"/>
+        </message>
+        
+        <message id="30" name="Message30">
+            <field fieldIndex="0" name="field0" type="CB2_INT_32"/>
+            <field fieldIndex="1" name="field1" type="CB2_LNG_64"/>
+        </message>
+        
+        <message id="31" name="Message31">
+            <field fieldIndex="0" name="field0" type="CB2_INT_32"/>
+            <field fieldIndex="1" name="field1" type="CB2_INT_32"/>
+            <field fieldIndex="2" name="field2" type="CB2_INT_32"/>
+            <field fieldIndex="3" name="field3" type="CB2_INT_32"/>
+            <field fieldIndex="4" name="field4" type="CB2_INT_32"/>
+            <field fieldIndex="5" name="field5" type="CB2_INT_32"/>
+            <field fieldIndex="6" name="field6" type="CB2_INT_32"/>
+            <field fieldIndex="7" name="field7" type="CB2_INT_32"/>
+            <field fieldIndex="8" name="field8" type="CB2_INT_32"/>
+            <field fieldIndex="9" name="field9" type="CB2_INT_32"/>
+            <field fieldIndex="10" name="field10" type="CB2_INT_32"/>
+            <field fieldIndex="11" name="field11" type="CB2_INT_32"/>
+            <field fieldIndex="12" name="field12" type="CB2_INT_32"/>
+        </message>
+        
+        <message id="32" name="Message32">
+            <field fieldIndex="0" name="field0" type="CB2_LNG_64"/>
+            <field fieldIndex="1" name="field1" type="CB2_LNG_64"/>
+            <field fieldIndex="2" name="field2" type="CB2_LNG_64"/>
+            <field fieldIndex="3" name="field3" type="CB2_LNG_64"/>
+            <field fieldIndex="4" name="field4" type="CB2_LNG_64"/>
+            <field fieldIndex="5" name="field5" type="CB2_LNG_64"/>
+            <field fieldIndex="6" name="field6" type="CB2_LNG_64"/>
+            <field fieldIndex="7" name="field7" type="CB2_LNG_64"/>
+            <field fieldIndex="8" name="field8" type="CB2_LNG_64"/>
+            <field fieldIndex="9" name="field9" type="CB2_LNG_64"/>
+            <field fieldIndex="10" name="field10" type="CB2_LNG_64"/>
+            <field fieldIndex="11" name="field11" type="CB2_LNG_64"/>
+            <field fieldIndex="12" name="field12" type="CB2_LNG_64"/>
+        </message>
+        
+        <message id="33" name="Message33">
+            <field fieldIndex="0" name="field0" type="EnumBNR"/>
+            <field fieldIndex="1" name="field1" type="EnumBNR"/>
+            <field fieldIndex="2" name="field2" type="EnumBNR"/>
+            <field fieldIndex="3" name="field3" type="EnumBNR"/>
+            <field fieldIndex="4" name="field4" type="EnumBNR"/>
+            <field fieldIndex="5" name="field5" type="EnumBNR"/>
+            <field fieldIndex="6" name="field6" type="EnumBNR"/>
+            <field fieldIndex="7" name="field7" type="EnumBNR"/>
+            <field fieldIndex="8" name="field8" type="EnumBNR"/>
+            <field fieldIndex="9" name="field9" type="EnumBNR"/>
+            <field fieldIndex="10" name="field10" type="EnumBNR"/>
+            <field fieldIndex="11" name="field11" type="EnumBNR"/>
+            <field fieldIndex="12" name="field12" type="EnumBNR"/>
+        </message>
+        
+        <message id="34" name="Message34">
+            <field fieldIndex="0" name="field0" type="EnumCB2"/>
+            <field fieldIndex="1" name="field1" type="EnumCB2"/>
+            <field fieldIndex="2" name="field2" type="EnumCB2"/>
+            <field fieldIndex="3" name="field3" type="EnumCB2"/>
+            <field fieldIndex="4" name="field4" type="EnumCB2"/>
+            <field fieldIndex="5" name="field5" type="EnumCB2"/>
+            <field fieldIndex="6" name="field6" type="EnumCB2"/>
+            <field fieldIndex="7" name="field7" type="EnumCB2"/>
+            <field fieldIndex="8" name="field8" type="EnumCB2"/>
+            <field fieldIndex="9" name="field9" type="EnumCB2"/>
+            <field fieldIndex="10" name="field10" type="EnumCB2"/>
+            <field fieldIndex="11" name="field11" type="EnumCB2"/>
+            <field fieldIndex="12" name="field12" type="EnumCB2"/>
+        </message>
+        
+        <message id="35" name="Message35">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+        </message>
+        
+        <message id="36" name="Message36">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="3" name="field3" type="UINT_8"/>
+        </message>
+        
+        <message id="37" name="Message37">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_8"/>
+            <field fieldIndex="3" name="field3" type="UINT_8"/>
+            <field fieldIndex="4" name="field4" type="UINT_8"/>
+            <field fieldIndex="5" name="field5" type="UINT_8"/>
+            <field fieldIndex="6" name="field6" type="UINT_8"/>
+            <field fieldIndex="7" name="field7" type="UINT_8"/>
+        </message>
+        
+        <message id="39" name="Message39">
+            <field fieldIndex="0" name="field0" type="CharArrayWithDelimiter"/>
+        </message>
+        
+        <message id="40" name="Message40">
+            <field fieldIndex="0" name="field0" type="CharArrayWithDelimiter"/>
+        </message>
+        
+        <message id="41" name="Message41">
+            <field fieldIndex="0" name="field0" type="UINT_16"/>
+            <field fieldIndex="1" name="field1" type="UINT_16"/>
+            <field fieldIndex="2" name="field2" type="UINT_16"/>
+            <field fieldIndex="3" name="field3" type="UINT_16"/>
+        </message>
+        
+        <message id="42" name="Message42">
+            <field fieldIndex="0" name="field0" type="UINT_5"/>
+            <field fieldIndex="1" name="field1" type="CharArrayWithDelimiter"/>
+            <field fieldIndex="2" name="field2" type="EnumCB2"/>
+            <field fieldIndex="3" name="field3" type="Structure1"/>
+        </message>
+        
+        <message id="43" name="Message43">
+            <field fieldIndex="0" name="field0" type="BOOLEAN_1"/>
+            <field fieldIndex="1" name="field1" type="BOOLEAN_1"/>
+            <field fieldIndex="2" name="field2" type="BOOLEAN_1"/>
+            <field fieldIndex="3" name="field3" type="STRING_80"/>
+            <field fieldIndex="4" name="field4" type="BOOLEAN_1"/>
+            <field fieldIndex="5" name="field5" type="BOOLEAN_1"/>
+            <field fieldIndex="6" name="field6" type="BOOLEAN_1"/>
+            <field fieldIndex="7" name="field7" type="BOOLEAN_1"/>
+            <field fieldIndex="8" name="field8" type="BOOLEAN_1"/>
+        </message>
+        
+        <message id="44" name="Message44">
+            <field fieldIndex="0" name="field0" type="BOOLEAN_1"/>
+            <field fieldIndex="1" name="field1" type="BOOLEAN_1"/>
+            <field fieldIndex="2" name="field2" type="BOOLEAN_1"/>
+            <field fieldIndex="3" name="field3" type="STRING_8"/>
+            <field fieldIndex="4" name="field4" type="BOOLEAN_1"/>
+            <field fieldIndex="5" name="field5" type="BOOLEAN_1"/>
+            <field fieldIndex="6" name="field6" type="BOOLEAN_1"/>
+            <field fieldIndex="7" name="field7" type="BOOLEAN_1"/>
+            <field fieldIndex="8" name="field8" type="BOOLEAN_1"/>
+        </message>
+        
+        <message id="45" name="Message45">
+            <field fieldIndex="0" name="field0" type="BOOLEAN_1"/>
+            <field fieldIndex="1" name="field1" type="STRING_80"/>
+            <field fieldIndex="2" name="field2" type="BOOLEAN_1"/>
+            <field fieldIndex="3" name="field3" type="BOOLEAN_1"/>
+            <field fieldIndex="4" name="field4" type="BOOLEAN_1"/>
+            <field fieldIndex="5" name="field5" type="BOOLEAN_1"/>
+            <field fieldIndex="6" name="field6" type="BOOLEAN_1"/>
+            <field fieldIndex="7" name="field7" type="BOOLEAN_1"/>
+            <field fieldIndex="8" name="field8" type="BOOLEAN_1"/>
+        </message>
+        
+        <message id="46" name="Message46">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_16"/>
+            <field fieldIndex="3" name="field3" type="EnumCB2"/>
+            <field fieldIndex="4" name="field4" type="BOOLEAN_1"/>
+            <field fieldIndex="5" name="field5" type="BOOLEAN_1"/>
+            <field fieldIndex="6" name="field6" type="BOOLEAN_1"/>
+            <field fieldIndex="7" name="field7" type="BOOLEAN_1"/>
+            <field fieldIndex="8" name="field8" type="BOOLEAN_1"/>
+            <field fieldIndex="9" name="field9" type="BOOLEAN_1"/>
+            <field fieldIndex="10" name="field10" type="BOOLEAN_1"/>
+            <field fieldIndex="11" name="field11" type="BOOLEAN_1"/>
+            <field fieldIndex="12" name="field12" type="UINT_16"/>
+            <field fieldIndex="13" name="field13" type="UINT_8"/>
+        </message>
+        
+        <message id="47" name="Message47">
+            <field fieldIndex="0" name="field0" type="UINT_8"/>
+            <field fieldIndex="1" name="field1" type="UINT_8"/>
+            <field fieldIndex="2" name="field2" type="UINT_16"/>
+            <field fieldIndex="3" name="field3" type="EnumCB2"/>
+            <field fieldIndex="4" name="field4" type="BOOLEAN_1"/>
+            <field fieldIndex="5" name="field5" type="BOOLEAN_1"/>
+            <field fieldIndex="6" name="field6" type="BOOLEAN_1"/>
+            <field fieldIndex="7" name="field7" type="BOOLEAN_1"/>
+            <field fieldIndex="8" name="field8" type="BOOLEAN_1"/>
+            <field fieldIndex="9" name="field9" type="BOOLEAN_1"/>
+            <field fieldIndex="10" name="field10" type="BOOLEAN_1"/>
+            <field fieldIndex="11" name="field11" type="BOOLEAN_1"/>
+            <field fieldIndex="12" name="field12" type="UINT_16"/>
+            <field fieldIndex="13" name="field13" type="UINT_8"/>
+        </message>
+        
+        <message id="48" name="Message48">
+            <field fieldIndex="0" name="field0" type="UINT_16"/>
+        </message>
+        
+        <message id="49" name="Message49">
+            <field fieldIndex="0" name="field0" type="UINT_16"/>
+            <field fieldIndex="1" name="field1" type="UINT_16"/>
+            <field fieldIndex="2" name="field2" type="Array1"/>
+        </message>
+        
+        <message id="50" name="Message50">
+            <field fieldIndex="0" name="field0" type="Array1"/>
+            <field fieldIndex="1" name="field1" type="UINT_16"/>
+            <field fieldIndex="2" name="field2" type="UINT_16"/>
+        </message>
+        
+        <message id="51" name="Message51">
+            <field fieldIndex="0" name="field_0" type="UINT_8"/>
+            <field elementCountMessageField="field_0" fieldIndex="1" name="field_1" type="Structure2Array"/>
+        </message>
+        
+        <message id="52" name="Message52">
+            <field fieldIndex="0" name="field_0" type="Array2"/>
+        </message>
+        
+        <message id="53" name="Message53">
+            <field fieldIndex="0" name="field_0" type="CUSTOM_8"/>
+            <field fieldIndex="1" name="field_1" type="CUSTOM_8"/>
+            <field fieldIndex="2" name="field_2" type="CUSTOM_8"/>
+            <field fieldIndex="3" name="field_3" type="CUSTOM_8"/>
+        </message>
+        
+        <message id="54" name="Message54">
+            <field fieldIndex="0" name="field_0" type="CUSTOM_7"/>
+            <field fieldIndex="1" name="field_1" type="CUSTOM_23"/>
+            <field fieldIndex="2" name="field_2" type="CUSTOM_10"/>
+        </message>
+        
+        <message id="55" name="Message55">
+            <field fieldIndex="0" name="field_0" type="UINT_8"/>
+            <field elementCountMessageField="field_0" fieldIndex="1" name="field_1" type="EnumBNRArray"/>
+        </message>
+        
+        <message id="56" name="Message56">
+            <field fieldIndex="0" name="field_0" type="UINT_8"/>
+            <field fieldIndex="1" name="field_1" type="Structure3"/>
+        </message>
+        
+        <message id="57" name="Message57">
+            <field fieldIndex="0" name="field_0" type="UINT_8"/>
+            <field elementCountMessageField="field_0" fieldIndex="1" name="field_1" type="Array2"/>
+            <field elementCountMessageField="(##field_0## + 1)" fieldIndex="2" name="field_2" type="Array2"/>
+            <field elementCountMessageField="field_0" fieldIndex="3" name="field_3" type="Structure1Array"/>
         </message>
         
     </messages>
     
     <codecs>
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd">
+        <codec byteOrder="BIG_ENDIAN" name="TYPETEST_CODEC_BE">
             <header>
-                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
-                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_16"/>
+                <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="UINT_16"/>
             </header>
             <footer/>
             
@@ -102,17 +485,107 @@
             <message name="Message7"/>
             <message name="Message8"/>
             <message name="Message9"/>
+            <message name="Message10"/>
+            <message name="Message11"/>
+            <message name="Message12"/>
             <message name="Message13"/>
+            <message name="Message14"/>
+            <message name="Message15"/>
+            <message name="Message16"/>
+            <message name="Message17"/>
+            <message name="Message18"/>
+            <message name="Message19"/>
+            <message name="Message20"/>
+            <message name="Message21"/>
+            <message name="Message22"/>
+            <message name="Message23"/>
+            <message name="Message24"/>
+            <message name="Message25"/>
+            <message name="Message26"/>
+            <message name="Message27"/>
+            <message name="Message28"/>
+            <message name="Message29"/>
+            <message name="Message30"/>
+            <message name="Message31"/>
+            <message name="Message32"/>
+            <message name="Message33"/>
+            <message name="Message34"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
+            <message name="Message39"/>
+            <message name="Message40"/>
+            <message name="Message43"/>
+            <message name="Message44"/>
+            <message name="Message45"/>
+            <message name="Message46"/>
+            <message name="Message47"/>
+            <message name="Message48"/>
+            <message name="Message49"/>
+            <message name="Message50"/>
+            <message name="Message51"/>
+            <message name="Message53"/>
+            <message name="Message54"/>
+            <message name="Message55"/>
+            <message name="Message56"/>
+            <message name="Message57"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PrePost_BigEnd">
+        <codec byteOrder="LITTLE_ENDIAN" name="TYPETEST_CODEC">
             <header>
-                <field defaultValue="{(byte)0x0A}" fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
-                <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_16"/>
+                <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="UINT_16"/>
+            </header>
+            <footer/>
+            
+            <message name="Message1"/>
+            <message name="Message2"/>
+            <message name="Message3"/>
+            <message name="Message4"/>
+            <message name="Message5"/>
+            <message name="Message6"/>
+            <message name="Message7"/>
+            <message name="Message8"/>
+            <message name="Message9"/>
+            <message name="Message10"/>
+            <message name="Message11"/>
+            <message name="Message12"/>
+            <message name="Message13"/>
+            <message name="Message14"/>
+            <message name="Message15"/>
+            <message name="Message16"/>
+            <message name="Message17"/>
+            <message name="Message18"/>
+            <message name="Message19"/>
+            <message name="Message20"/>
+            <message name="Message21"/>
+            <message name="Message22"/>
+            <message name="Message23"/>
+            <message name="Message24"/>
+            <message name="Message25"/>
+            <message name="Message26"/>
+            <message name="Message27"/>
+            <message name="Message28"/>
+            <message name="Message29"/>
+            <message name="Message30"/>
+            <message name="Message31"/>
+            <message name="Message32"/>
+            <message name="Message33"/>
+            <message name="Message34"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="PREAMBLE_POSTAMBLE_CODEC">
+            <header>
+                <field defaultValue="{(byte)0xAA, (byte)0xBB}" fieldIndex="0" fieldProperty="Preamble" name="fieldPreamble" type="PreambleByteArray"/>
+                <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_16"/>
             </header>
             <footer>
-                <field fieldIndex="0" fieldProperty="Postamble" name="msgPostamble" type="PrePostAmbleArray"/>
+                <field fieldIndex="0" fieldProperty="Postamble" name="fieldPostamble" type="PreambleByteArray"/>
             </footer>
             
             <message name="Message1"/>
@@ -124,97 +597,160 @@
             <message name="Message7"/>
             <message name="Message8"/>
             <message name="Message9"/>
+            <message name="Message10"/>
+            <message name="Message11"/>
+            <message name="Message12"/>
+            <message name="Message13"/>
+            <message name="Message14"/>
+            <message name="Message15"/>
+            <message name="Message16"/>
+            <message name="Message17"/>
+            <message name="Message18"/>
+            <message name="Message19"/>
+            <message name="Message20"/>
+            <message name="Message21"/>
+            <message name="Message22"/>
+            <message name="Message23"/>
+            <message name="Message24"/>
+            <message name="Message25"/>
+            <message name="Message26"/>
+            <message name="Message27"/>
+            <message name="Message28"/>
+            <message name="Message29"/>
+            <message name="Message30"/>
+            <message name="Message31"/>
+            <message name="Message32"/>
+            <message name="Message33"/>
+            <message name="Message34"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd_Checksum">
+        <codec byteOrder="BIG_ENDIAN" name="TYPETEST_CODEC_BE_32">
             <header>
-                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
-                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="ULONG_32"/>
+                <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="ULONG_32"/>
             </header>
-            <footer>
-                <field fieldIndex="0" fieldProperty="Checksum" name="msgChecksum" type="CheckSumArray"/>
-            </footer>
+            <footer/>
             
-            <message name="Message1"/>
-            <message name="Message2"/>
-            <message name="Message3"/>
-            <message name="Message4"/>
-            <message name="Message5"/>
-            <message name="Message6"/>
-            <message name="Message7"/>
-            <message name="Message8"/>
-            <message name="Message9"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_Id_BigEnd_Checksum">
+        <codec byteOrder="LITTLE_ENDIAN" name="TYPETEST_CODEC_LE_32">
             <header>
-                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
-                <field fieldIndex="1" name="msgHeaderField0" type="UINT_8"/>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="ULONG_32"/>
+                <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="ULONG_32"/>
             </header>
-            <footer>
-                <field fieldIndex="0" fieldProperty="Checksum" name="msgChecksum" type="CheckSumArray"/>
-            </footer>
+            <footer/>
             
-            <message name="Message1"/>
-            <message name="Message2"/>
-            <message name="Message3"/>
-            <message name="Message4"/>
-            <message name="Message5"/>
-            <message name="Message6"/>
-            <message name="Message7"/>
-            <message name="Message8"/>
-            <message name="Message9"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd_CalculatedSize">
+        <codec byteOrder="BIG_ENDIAN" name="HEADER_FORMULA_CODEC">
             <header>
-                <field fieldIndex="0" name="field0" type="UINT_8"/>
-                <field fieldIndex="1" fieldProperty="CalculatedSize" name="length" type="UINT_8"/>
-                <field fieldIndex="2" name="field2" type="UINT_8"/>
+                <field fieldIndex="0" fieldProperty="None" name="target" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="None" name="source" type="UINT_8"/>
+                <field fieldIndex="2" fieldProperty="PayloadSize" name="msglength" type="UINT_16"/>
                 <field fieldIndex="3" fieldProperty="Id" name="msgId" type="UINT_8"/>
             </header>
             <footer/>
             
-            <message name="Message1"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLenPayload_BigEnd">
+        <codec byteOrder="BIG_ENDIAN" name="ONLY_ID_CODEC_BE">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="None" name="msglength" type="UINT_8"/>
+            </header>
+            <footer/>
+            
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
+            
+        </codec>
+        
+        <codec byteOrder="LITTLE_ENDIAN" name="ONLY_ID_CODEC_LE">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
+                <field fieldIndex="1" fieldProperty="None" name="msglength" type="UINT_8"/>
+            </header>
+            <footer/>
+            
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="ID_LEN_CODEC_BE">
             <header>
                 <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
                 <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="UINT_8"/>
             </header>
             <footer/>
             
-            <message name="Message1"/>
-            <message name="Message11"/>
+            <message name="Message35"/>
+            <message name="Message36"/>
+            <message name="Message37"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_IdLen_BigEnd_HeaderArray">
+        <codec byteOrder="BIG_ENDIAN" name="BE_TYPE_CODEC1">
             <header>
-                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_8"/>
-                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
-                <field fieldIndex="2" name="fieldHeaderArr" type="UINT_8_Array_Len3"/>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_16"/>
+                <field fieldIndex="1" fieldProperty="PayloadSize" name="msglength" type="UINT_16"/>
             </header>
             <footer/>
             
-            <message name="Message1"/>
+            <message name="Message41"/>
             
         </codec>
         
-        <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PreIdLen_BigEnd_HeaderArray">
+        <codec byteOrder="BIG_ENDIAN" name="BE_TYPE_CODEC2">
             <header>
-                <field defaultValue="{(byte)0x0A, (byte)0x0B}" fieldIndex="0" fieldProperty="Preamble" name="msgPreamble123" type="PreambleNoConstSizeArray"/>
-                <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
-                <field fieldIndex="2" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_16"/>
+                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_16"/>
             </header>
             <footer/>
             
-            <message name="Message1"/>
+            <message name="Message41"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="BE_TYPE_ARRAYSIZE_CODEC">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_16"/>
+                <field fieldIndex="1" fieldProperty="TotalSize" name="msglength" type="UINT_16"/>
+                <field fieldIndex="2" name="msgArrSizeField" type="UINT_16"/>
+            </header>
+            <footer/>
+            
+            <message name="Message52"/>
+            
+        </codec>
+        
+        <codec byteOrder="BIG_ENDIAN" name="BE_TYPE_ANNOTATE_CODEC">
+            <header>
+                <field fieldIndex="0" fieldProperty="Id" name="msgId" type="UINT_16"/>
+                <field fieldIndex="1" name="headerField1" type="UINT_16"/>
+                <field fieldIndex="2" fieldProperty="TotalSize" name="msglength" type="UINT_16"/>
+            </header>
+            <footer/>
+            
+            <message name="Message52"/>
             
         </codec>
     </codecs>

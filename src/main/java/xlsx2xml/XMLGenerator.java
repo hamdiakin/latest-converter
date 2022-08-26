@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import structuralClasses.*;
 
-public class formXML {
+public class XMLGenerator {
     private static final String FILE_NAME = "output.xlsx";
 
     public static void main(String[] args) throws ParserConfigurationException, TransformerException {

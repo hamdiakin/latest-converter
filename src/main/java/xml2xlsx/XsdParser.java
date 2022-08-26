@@ -13,7 +13,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Element;
 
-public class xsdReader {
+public class XsdParser {
     static String PATH_NAME = ".\\data-files\\TA.xsd";
 
     public static String[] documentReader(String pathName, String elementLvl1, String elementLvl2, String elementLvl3,
