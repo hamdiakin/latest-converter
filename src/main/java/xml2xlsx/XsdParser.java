@@ -14,7 +14,8 @@ import org.xml.sax.SAXException;
 import org.w3c.dom.Element;
 
 public class XsdParser {
-    static String PATH_NAME = ".\\data-files\\TA.xsd";
+    // static String PATH_NAME = ".\\data-files\\TA.xsd";
+    static String PATH_NAME = "./Users/hamdiakin/Desktop/latest-converter/data-files/TA.xsd";
 
     public static String[] documentReader(String pathName, String elementLvl1, String elementLvl2, String elementLvl3,
             String type) throws ParserConfigurationException, SAXException, IOException {

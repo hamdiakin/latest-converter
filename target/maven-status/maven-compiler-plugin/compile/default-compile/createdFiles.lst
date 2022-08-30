@@ -1,1 +1,13 @@
-basicIdea.class
+structuralClasses/Codecs.class
+structuralClasses/MessageFields.class
+structuralClasses/Structures.class
+structuralClasses/CodecMessage.class
+structuralClasses/CodecFooter.class
+structuralClasses/Primitives.class
+structuralClasses/CodecHeader.class
+structuralClasses/ArrayType.class
+structuralClasses/Messages.class
+structuralClasses/CodecFields.class
+xml2xlsx/XsdParser.class
+structuralClasses/StructureFields.class
+xml2xlsx/ExcelGenerator.class

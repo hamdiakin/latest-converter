@@ -3,16 +3,11 @@ package xlsx2xml;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -21,6 +16,8 @@ import java.io.OutputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
+
+import enums.ExcelCellNumbers;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -61,7 +58,6 @@ public class XMLGenerator {
             String previousCodecName = "";
             String currentCodecName = "";
             boolean isEndOfCodecSheet = false;
-            String defaultValue = "";
 
             // all the part below belongs to codec part
             // array list for holding a single codec info
@@ -118,14 +114,22 @@ public class XMLGenerator {
                             samePart = false;
                         }
 
-                        if (line[3].equals("HEADER")) {
+                        if (line[ExcelCellNumbers.C3.getValue()].equals("HEADER")) {
                             headerFields.add(
-                                    new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7], line[8]));
-                        } else if (line[3].equals("FOOTER")) {
+                                    new CodecFields(line[ExcelCellNumbers.C4.getValue()],
+                                            line[ExcelCellNumbers.C5.getValue()],
+                                            Integer.parseInt(line[ExcelCellNumbers.C6.getValue()]),
+                                            line[ExcelCellNumbers.C7.getValue()],
+                                            line[ExcelCellNumbers.C8.getValue()]));
+                        } else if (line[ExcelCellNumbers.C3.getValue()].equals("FOOTER")) {
                             footerFields.add(
-                                    new CodecFields(line[4], line[5], Integer.parseInt(line[6]), line[7], line[8]));
-                            ;
-                        } else if (line[3].equals("MESSAGES")) {
+                                    new CodecFields(line[ExcelCellNumbers.C4.getValue()],
+                                            line[ExcelCellNumbers.C5.getValue()],
+                                            Integer.parseInt(line[ExcelCellNumbers.C6.getValue()]),
+                                            line[ExcelCellNumbers.C7.getValue()],
+                                            line[ExcelCellNumbers.C8.getValue()]));
+
+                        } else if (line[ExcelCellNumbers.C3.getValue()].equals("MESSAGES")) {
                             codecMessages.add(new CodecMessage(line[4]));
                         }
 
@@ -222,9 +226,10 @@ public class XMLGenerator {
                                 }
                             }
                             if (contdPart == false || isEndOfSheet == true) {
-                                // object notations will be here
+
                                 lastItem = message_info.get(message_info.size() - 1);
                                 message_info.remove(message_info.size() - 1);
+
                                 // iterate over the codecInfo array list and form the objects
                                 for (String[] line : message_info) {
                                     if (line[5].equals("")) {
@@ -247,8 +252,13 @@ public class XMLGenerator {
                             }
                             break;
                         case "arrays":
-                            arraytype_list.add(new ArrayType(message_info.get(0)[1], message_info.get(0)[2],
-                                    Integer.parseInt(message_info.get(0)[3])));
+                            if (message_info.get(0)[3].equals(""))
+
+                                arraytype_list.add(new ArrayType(message_info.get(0)[1], message_info.get(0)[2]));
+                            else
+                                arraytype_list.add(new ArrayType(message_info.get(0)[1], message_info.get(0)[2],
+                                        Integer.parseInt(message_info.get(0)[3])));
+
                             message_info.clear();
                             break;
                         case "structures":
@@ -472,8 +482,8 @@ public class XMLGenerator {
     }
 
     public static void putLineBreak(Document doc, Element element) {
-        Text lineBreak4 = (Text) doc.createTextNode("\n\n");
-        element.appendChild(lineBreak4);
+        Text linebreak = (Text) doc.createTextNode("\n");
+        element.appendChild(linebreak);
     }
 
     public static HashMap<String, ArrayList<CodecMessage>> messageInfo4Codec(Sheet sheet) {
@@ -491,9 +501,6 @@ public class XMLGenerator {
         String[] lastItem = new String[10];
         String codecName = "";
         rowIterator.next();
-
-        // to be deleted
-        ArrayList<String> codecNames = new ArrayList<String>();
 
         while (rowIterator.hasNext()) {
             Row currentRow = rowIterator.next();
@@ -532,7 +539,6 @@ public class XMLGenerator {
                 contdPart = true;
                 codecName = codecInfo.get(0)[1];
                 codecMessageMap.put(codecName, new ArrayList<CodecMessage>(codecMessageList));
-                codecNames.add(codecName);
                 codecInfo.clear();
                 codecMessageList.clear();
                 codecInfo.add(lastItem);
@@ -543,7 +549,6 @@ public class XMLGenerator {
 
                     }
                     codecMessageMap.put(codecName, new ArrayList<CodecMessage>(codecMessageList));
-                    codecNames.add(codecName);
                 }
 
             }
