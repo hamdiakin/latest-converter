@@ -1,10 +1,10 @@
 package structuralClasses;
 
 public class MessageFields{
-    String name = "";
-    int fIndex ;
-    String type = "";
-    String elementCountField = "";
+    private String name = "";
+    private int fIndex ;
+    private String type = "";
+    private String elementCountField = "";
     
     public MessageFields(String name, int fIndex, String type, String elementCountField) {
         this.name = name;

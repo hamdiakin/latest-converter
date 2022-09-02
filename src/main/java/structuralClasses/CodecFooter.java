@@ -3,7 +3,7 @@ package structuralClasses;
 import java.util.ArrayList;
 
 public class CodecFooter {
-    ArrayList<CodecFields> footerFields = new ArrayList<CodecFields>();
+    private ArrayList<CodecFields> footerFields = new ArrayList<CodecFields>();
 
     public ArrayList<CodecFields> getFooterFields() {
         return footerFields;

@@ -29,12 +29,12 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.*;
 
 public class ExcelGenerator {
-    static ExecutorService executor = Executors.newFixedThreadPool(10);
-    private static final String FILE_NAME = "output.xlsx";
-    public static final String XSD_SOURCE_PATH = "./data-files/TA.xsd";
-    // private String INPUT_PATH = ".\\data-files\\easyMessageTest.xml";
-    private static String INPUT_PATH = "./data-files/easyMessageTest.xml";
+    private static final String FILE_NAME = "./src/main/outputs/output.xlsx";
+    private static final String XSD_SOURCE_PATH = "./src/main/resources/TA.xsd";
+    private static final String INPUT_PATH = "./src/main/resources/easyMessageTest.xml";
 
+    // for the thread pool
+    ExecutorService executor = Executors.newFixedThreadPool(10);
     // main method
     public static void main(String[] args) {
 
@@ -53,9 +53,9 @@ public class ExcelGenerator {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
 
-            ArrayList<Primitives> primitive_list = new ArrayList<Primitives>();
-            ArrayList<ArrayType> arrays_list = new ArrayList<ArrayType>();
-            ArrayList<Structures> structure_list = new ArrayList<Structures>();
+            var  primitive_list = new ArrayList<Primitives>();
+            var arrays_list = new ArrayList<ArrayType>();
+            var  structure_list = new ArrayList<Structures>();
 
             readPrimitives(doc, primitive_list);
             readArrays(doc, arrays_list);
@@ -307,7 +307,7 @@ public class ExcelGenerator {
 
     }
 
-    /* This method is used to get a string array out of a set of strings */
+    // This method is used to get a string array out of a set of strings 
     public static String[] getDataValidation(Set<String> set) {
 
         String[] dataValidatinlist = new String[10];
@@ -376,7 +376,7 @@ public class ExcelGenerator {
     // The reason that they are seperate functions is formula part is not
     // comprehensive enough
     // Some of the examples has been commented out in the function below
-    public static void setDataValidationWithFormula(XSSFSheet sheet, CellRangeAddressList addressList,
+    private static void setDataValidationWithFormula(XSSFSheet sheet, CellRangeAddressList addressList,
             String[] dropDownList) {
 
         DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
@@ -398,7 +398,7 @@ public class ExcelGenerator {
 
     }
 
-    public static void setDataValidationWithList(XSSFSheet sheet, CellRangeAddressList addressList,
+    private static void setDataValidationWithList(XSSFSheet sheet, CellRangeAddressList addressList,
             String[] dropDownList) {
 
         DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
@@ -411,7 +411,7 @@ public class ExcelGenerator {
 
     }
 
-    public static void readPrimitives(Document doc, ArrayList<Primitives> primitive_list) {
+    private static void readPrimitives(Document doc, ArrayList<Primitives> primitive_list) {
 
         NodeList primitiveList = doc.getElementsByTagName("primitive");
         for (int j = 0; j < primitiveList.getLength(); j++) {
@@ -427,7 +427,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static void readArrays(Document doc, ArrayList<ArrayType> arrays_list) {
+    private static void readArrays(Document doc, ArrayList<ArrayType> arrays_list) {
         NodeList arrays = doc.getElementsByTagName("array");
         for (int j = 0; j < arrays.getLength(); j++) {
             Node q = arrays.item(j);
@@ -445,7 +445,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static void readStructures(Document doc, ArrayList<Structures> structure_list) {
+    private static void readStructures(Document doc, ArrayList<Structures> structure_list) {
         NodeList structures = doc.getElementsByTagName("structure");
         ArrayList<StructureFields> structureField_list = new ArrayList<StructureFields>();
         String name = "";
@@ -462,7 +462,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static void readStructureFields(Element field, ArrayList<StructureFields> structureField_list) {
+    private static void readStructureFields(Element field, ArrayList<StructureFields> structureField_list) {
         NodeList structureFields = field.getElementsByTagName("field");
         for (int k = 0; k < structureFields.getLength(); k++) {
             Node r = structureFields.item(k);
@@ -482,7 +482,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static void readMessages(NodeList messageslist, ArrayList<Messages> message_list) {
+    private static void readMessages(NodeList messageslist, ArrayList<Messages> message_list) {
 
         ArrayList<MessageFields> message_field_list = new ArrayList<MessageFields>();
         String messageName = "";
@@ -515,7 +515,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static ArrayList<MessageFields> readMessageFields(Element field,
+    private static ArrayList<MessageFields> readMessageFields(Element field,
             ArrayList<MessageFields> message_field_list) {
         NodeList messageField = field.getElementsByTagName("field");
         for (int k = 0; k < messageField.getLength(); k++) {
@@ -537,7 +537,7 @@ public class ExcelGenerator {
         return message_field_list;
     }
 
-    public static void readCodecs(NodeList codecslist, ArrayList<Codecs> codec_list) {
+    private static void readCodecs(NodeList codecslist, ArrayList<Codecs> codec_list) {
 
         for (int i = 0; i < codecslist.getLength(); i++) {
 
@@ -576,7 +576,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static void readCodecFields(String nodeName, Element field, ArrayList<CodecFields> headerFields,
+    private static void readCodecFields(String nodeName, Element field, ArrayList<CodecFields> headerFields,
             ArrayList<CodecFields> footerFields) {
         // for codec fields
         String fieldName = "";
@@ -615,7 +615,7 @@ public class ExcelGenerator {
         }
     }
 
-    public static void readCodecMessages(NodeList messages_for_codec, ArrayList<CodecMessage> codecMessages) {
+    private static void readCodecMessages(NodeList messages_for_codec, ArrayList<CodecMessage> codecMessages) {
         String codecMessageName = "";
         // This particular code snippet is dedicated for messages per codec
         for (int k = 0; k < messages_for_codec.getLength(); k++) {

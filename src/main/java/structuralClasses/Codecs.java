@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Codecs {
 
-    String name = "";
-    String byteOrder = "";
-    CodecHeader codecHeader = null;
-    CodecFooter codecFooter = null;
-    ArrayList<CodecMessage> codecMessages = new ArrayList<CodecMessage>();
+    private String name = "";
+    private String byteOrder = "";
+    private CodecHeader codecHeader = null;
+    private CodecFooter codecFooter = null;
+    private ArrayList<CodecMessage> codecMessages = new ArrayList<CodecMessage>();
 
     public String getName() {
         return name;
@@ -50,7 +50,8 @@ public class Codecs {
         this.codecMessages = codecMessages;
     }
 
-    public Codecs(String name, String byteOrder, CodecHeader codecHeader, CodecFooter codecFooter, ArrayList<CodecMessage> codecMessages) {
+    public Codecs(String name, String byteOrder, CodecHeader codecHeader, CodecFooter codecFooter,
+            ArrayList<CodecMessage> codecMessages) {
         this.name = name;
         this.byteOrder = byteOrder;
         this.codecHeader = codecHeader;

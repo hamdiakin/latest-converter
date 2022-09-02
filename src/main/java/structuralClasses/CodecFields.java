@@ -1,11 +1,11 @@
 package structuralClasses;
 
 public class CodecFields {
-    String name = "";
-    String fieldProperty = "";
-    int fieldIndex;
-    String type = "";
-    String defaultValue = "";
+    private String name = "";
+    private String fieldProperty = "";
+    private int fieldIndex;
+    private String type = "";
+    private String defaultValue = "";
 
     public String getName() {
         return name;

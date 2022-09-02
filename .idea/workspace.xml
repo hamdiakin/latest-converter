@@ -7,10 +7,20 @@
     <list default="true" id="326c1014-1b18-42b6-ae5d-1478ed03a338" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputXML.xml" beforeDir="false" afterPath="$PROJECT_DIR$/outputXML.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputXML.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/ArrayType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/ArrayType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecFields.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecFooter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecFooter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecHeader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecHeader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/CodecMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/Codecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/Codecs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/MessageFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/MessageFields.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/Messages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/Primitives.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/Primitives.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/StructureFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/StructureFields.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/structuralClasses/Structures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/structuralClasses/Structures.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xlsx2xml/XMLGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xlsx2xml/XMLGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xml2xlsx/ExcelGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xml2xlsx/ExcelGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xml2xlsx/XsdParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xml2xlsx/XsdParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/ArrayType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/ArrayType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFields.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFields.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFooter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/structuralClasses/CodecFooter.class" afterDir="false" />
@@ -25,10 +35,8 @@
       <change beforePath="$PROJECT_DIR$/target/classes/xlsx2xml/XMLGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/xlsx2xml/XMLGenerator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/xml2xlsx/ExcelGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/xml2xlsx/ExcelGenerator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/xml2xlsx/XsdParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/xml2xlsx/XsdParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/xml2xlsx-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/xml2xlsx-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,7 +64,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/hamdiakin/Desktop/latest-converter"
+    "last_opened_file_path": "C:/Users/stj.hakin/Desktop/updates/latest-converter"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

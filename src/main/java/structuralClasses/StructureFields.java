@@ -1,10 +1,10 @@
 package structuralClasses;
 
 public class StructureFields {
-    String name = "" ;
-    String type = "";
-    String elementCountStructureField = "";
-    int fieldIndex;
+    private String name = "" ;
+    private String type = "";
+    private String elementCountStructureField = "";
+    private int fieldIndex;
 
     public int getFieldIndex() {
         return fieldIndex;

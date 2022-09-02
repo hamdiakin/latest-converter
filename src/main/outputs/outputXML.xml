@@ -108,7 +108,7 @@
         
         <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PrePost_BigEnd">
             <header>
-                <field defaultValue="{(byte)0x0A}" fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
+                <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble" type="PrePostAmbleArray"/>
                 <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
             </header>
             <footer>
@@ -208,7 +208,7 @@
         
         <codec byteOrder="BIG_ENDIAN" name="EasyCodec_PreIdLen_BigEnd_HeaderArray">
             <header>
-                <field defaultValue="{(byte)0x0A, (byte)0x0B}" fieldIndex="0" fieldProperty="Preamble" name="msgPreamble123" type="PreambleNoConstSizeArray"/>
+                <field fieldIndex="0" fieldProperty="Preamble" name="msgPreamble123" type="PreambleNoConstSizeArray"/>
                 <field fieldIndex="1" fieldProperty="Id" name="msgId" type="UINT_8"/>
                 <field fieldIndex="2" fieldProperty="TotalSize" name="msglength" type="UINT_8"/>
             </header>

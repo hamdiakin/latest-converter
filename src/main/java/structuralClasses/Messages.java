@@ -3,9 +3,9 @@ package structuralClasses;
 import java.util.ArrayList;
 
 public class Messages{
-    String name = "";
-    int id ;
-    ArrayList<MessageFields> Messagefields = new ArrayList<MessageFields>();
+    private String name = "";
+    private int id ;
+    private ArrayList<MessageFields> Messagefields = new ArrayList<MessageFields>();
 
     public void setName(String name) {
         this.name = name;

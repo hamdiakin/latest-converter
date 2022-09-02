@@ -1,11 +1,11 @@
 package structuralClasses;
 
 public class Primitives {
-    String name = "";
-    String format = "";
-    int sizeInBytes;
-    int sizeInBits;
-    String type = "";
+    private String name = "";
+    private String format = "";
+    private int sizeInBytes;
+    private int sizeInBits;
+    private String type = "";
 
     public void setName(String name) {
         this.name = name;

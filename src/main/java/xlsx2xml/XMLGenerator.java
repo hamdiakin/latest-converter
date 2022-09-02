@@ -24,7 +24,7 @@ import java.util.HashMap;
 import structuralClasses.*;
 
 public class XMLGenerator {
-    private static final String FILE_NAME = "output.xlsx";
+    private static final String FILE_NAME = "./src/main/outputs/output.xlsx";
 
     public static void main(String[] args) throws ParserConfigurationException, TransformerException {
         try {
@@ -451,6 +451,7 @@ public class XMLGenerator {
 
             // print XML to system console
             writeXml(doc, System.out);
+            System.out.println("Done");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -475,7 +476,7 @@ public class XMLGenerator {
         transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "");
 
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("outputXML.xml"));
+        StreamResult result = new StreamResult(new File("./src/main/outputs/outputXML.xml"));
 
         transformer.transform(source, result);
 

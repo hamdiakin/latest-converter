@@ -1,9 +1,9 @@
 package structuralClasses;
 
 public class ArrayType {
-    String name = "";
-    String elementType = "";
-    int constantElementCount;
+    private String name = "";
+    private String elementType = "";
+    private int constantElementCount;
 
     public ArrayType(String name, String elementType, int constantElementCount) {
         this.name = name;

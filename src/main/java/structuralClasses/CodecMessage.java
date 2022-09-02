@@ -1,7 +1,7 @@
 package structuralClasses;
 
 public class CodecMessage {
-    String name = "";
+    private String name = "";
 
     public CodecMessage(String name) {
         this.name = name;

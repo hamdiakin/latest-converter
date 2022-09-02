@@ -2,13 +2,11 @@ package structuralClasses;
 
 import java.util.ArrayList;
 
-
 public class Structures {
-    String name = "";
-    ArrayList <StructureFields> Structurefields = new ArrayList <StructureFields>();
+    private String name = "";
+    private ArrayList<StructureFields> Structurefields = new ArrayList<StructureFields>();
 
-
-    public Structures(String name, ArrayList <StructureFields> Structurefields) {
+    public Structures(String name, ArrayList<StructureFields> Structurefields) {
         this.name = name;
         this.Structurefields = Structurefields;
     }
@@ -29,6 +27,4 @@ public class Structures {
         Structurefields = structurefields;
     }
 
-
 }
-

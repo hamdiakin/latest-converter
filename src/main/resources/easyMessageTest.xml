@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="TA.xsd" 
+    rootPackagePrefix="mef.easyMessageTest">
+
+
+    <types>
+        <primitive name="BYTE_CB2" format="CB2" sizeInBytes="0" sizeInBits="8" type="byte" />
+        <primitive name="BYTE" format="BNR" sizeInBytes="0" sizeInBits="8" type="byte" />
+        <primitive name="UINT_8" format="BNR" sizeInBytes="0" sizeInBits="8" type="int"     />
+        <primitive name="STRING_10CHAR" type="String" format="STR" sizeInBytes="10" sizeInBits="0" />
+        <primitive name="STRING_VARSIZE" type="String" format="STR" sizeInBytes="1" sizeInBits="0"/>
+        <primitive name="CHAR" format="CB2" sizeInBytes="0" sizeInBits="8" type="char"/>
+
+        <structure name="STRUCT1">
+            <field name="field0" type="UINT_8" fieldIndex="0"/>
+            <field name="field1" type="UINT_8_Array" fieldIndex="1" elementCountField="field0"/>
+        </structure>
+
+        <array name="PrePostAmbleArray" elementType="BYTE" constantElementCount="1"/>
+        <array name="CheckSumArray" elementType="BYTE" constantElementCount="2"/>
+        <array name="CharArray" elementType="BYTE_CB2"/>
+        <array name="UINT_8_Array" elementType="UINT_8"/>
+        <array name="UINT_8_Array_Len3" elementType="UINT_8" constantElementCount="3"/>
+        <array name="STRUCT1_Array_VarSize" elementType="STRUCT1"/>
+        <array name="STRUCT1_Array_ConstSize3" elementType="STRUCT1" constantElementCount="3"/>
+        <array name="CharTypeArray" elementType="CHAR"/>
+
+        <!-- PreambleNoConstSizeArray bu array için constantElementCount girilmeyecek. Testler bu şekilde girilen headerler için yazıldı. -->
+        <array name="PreambleNoConstSizeArray" elementType="BYTE"/>
+    </types>
+
+    <messages>
+        <message id="1" name="Message1">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+        </message>
+
+        <message id="2" name="Message2">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+            <field name="field1" fieldIndex="1" type="UINT_8"  />
+            <field name="field2" fieldIndex="2" type="UINT_8"   />
+        </message>
+
+        <message id="3" name="Message3">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+            <field name="field1" fieldIndex="1" type="UINT_8"  />
+            <field name="field2" fieldIndex="2" type="UINT_8"   />
+        </message>
+
+        <message id="4" name="Message4">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+            <field name="field1" fieldIndex="1" type="UINT_8"  />
+            <field name="field2" fieldIndex="2" type="UINT_8"   />
+            <field name="field3" fieldIndex="3" type="UINT_8"   />
+        </message>
+
+        <message id="5" name="Message5">
+            <field name="field0" fieldIndex="0" type="STRING_10CHAR"   />
+            <field name="field1" fieldIndex="1" type="STRING_10CHAR"  />
+            <field name="field2" fieldIndex="2" type="STRING_10CHAR"   />
+            <field name="field3" fieldIndex="3" type="STRING_10CHAR"   />
+        </message>
+
+        <message id="6" name="Message6">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+            <field name="field1" fieldIndex="1" type="CharArray" elementCountField="field0"  />
+        </message>
+
+        <message id="7" name="Message7">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+            <field name="field1" fieldIndex="1" type="STRUCT1_Array_VarSize" elementCountField="field0"  />
+        </message>
+
+        <message id="8" name="Message8">
+            <field name="field0" fieldIndex="0" type="UINT_8"   />
+            <field name="field1" fieldIndex="1" type="STRUCT1_Array_ConstSize3"  />
+        </message>
+
+        <message id="9" name="Message9">
+            <field name="field0" fieldIndex="0" type="UINT_8_Array"/>
+        </message>
+
+        <message id="10" name="Message10">
+            <field name="field0" fieldIndex="0" type="UINT_8" defaultValue="10"/>
+        </message>
+
+        <!-- Do not add any field. This is used for empty field message test -->
+        <message id="11" name="Message11"/>
+
+        <message id="12" name="Message12">
+            <field name="field0" fieldIndex="0" type="UINT_8"/>
+        </message>
+
+        <message id="13" name="Message13">
+            <field name="field0" fieldIndex="0" type="CharTypeArray" constantElementCount="5"/>
+        </message>
+
+    </messages>
+
+    <codecs>
+
+        <codec name="EasyCodec_IdLen_BigEnd" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgId" fieldProperty="Id" fieldIndex="0" type="UINT_8" />
+                <field name="msglength" fieldProperty="TotalSize" fieldIndex="1" type="UINT_8" />
+            </header>
+            <footer />
+
+            <message name="Message1" />
+            <message name="Message2" />
+            <message name="Message3" />
+            <message name="Message4" />
+            <message name="Message5" />
+            <message name="Message6" />
+            <message name="Message7" />
+            <message name="Message8" />
+            <message name="Message9" />
+            <message name="Message13"/>
+
+        </codec>
+
+        <codec name="EasyCodec_PrePost_BigEnd" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgPreamble" fieldProperty="Preamble" fieldIndex="0" type="PrePostAmbleArray" defaultValue="{(byte)0x0A}" />
+                <field name="msgId" fieldProperty="Id" fieldIndex="1" type="UINT_8" />
+            </header>
+            <footer>
+                <field name="msgPostamble" fieldProperty="Postamble" fieldIndex="0" type="PrePostAmbleArray" defaultValue="{(byte)0x0B}" />
+            </footer>
+
+            <message name="Message1" />
+            <message name="Message2" />
+            <message name="Message3" />
+            <message name="Message4" />
+            <message name="Message5" />
+            <message name="Message6" />
+            <message name="Message7" />
+            <message name="Message8" />
+            <message name="Message9" />
+
+        </codec>
+
+        <codec name="EasyCodec_IdLen_BigEnd_Checksum" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgId" fieldProperty="Id" fieldIndex="0" type="UINT_8" />
+                <field name="msglength" fieldProperty="TotalSize" fieldIndex="1" type="UINT_8" />
+            </header>
+            <footer>
+                <field name="msgChecksum" fieldProperty="Checksum" fieldIndex="0" type="CheckSumArray" />
+            </footer>
+
+            <message name="Message1" />
+            <message name="Message2" />
+            <message name="Message3" />
+            <message name="Message4" />
+            <message name="Message5" />
+            <message name="Message6" />
+            <message name="Message7" />
+            <message name="Message8" />
+            <message name="Message9" />
+
+        </codec>
+
+        <codec name="EasyCodec_Id_BigEnd_Checksum" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgId" fieldProperty="Id" fieldIndex="0" type="UINT_8" />
+                <field name="msgHeaderField0" fieldIndex="1" type="UINT_8" />
+            </header>
+            <footer>
+                <field name="msgChecksum" fieldProperty="Checksum" fieldIndex="0" type="CheckSumArray" />
+            </footer>
+
+            <message name="Message1" />
+            <message name="Message2" />
+            <message name="Message3" />
+            <message name="Message4" />
+            <message name="Message5" />
+            <message name="Message6" />
+            <message name="Message7" />
+            <message name="Message8" />
+            <message name="Message9" />
+
+        </codec>
+
+        <codec name="EasyCodec_IdLen_BigEnd_CalculatedSize" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="field0" fieldIndex="0" type="UINT_8" />
+                <field name="length" fieldProperty="CalculatedSize" fieldIndex="1" type="UINT_8"
+                       calculatedSizeFormula="PAYLOADSIZE + 2" payloadSizeFormula="CALCULATEDSIZE - 2"></field>
+                <field name="field2" fieldIndex="2" type="UINT_8" />
+                <field name="msgId" fieldProperty="Id" fieldIndex="3" type="UINT_8" />
+            </header>
+            <footer/>
+
+            <message name="Message1" />
+
+        </codec>
+
+        <codec name="EasyCodec_IdLenPayload_BigEnd" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgId" fieldProperty="Id" fieldIndex="0" type="UINT_8"/>
+                <field name="msglength" fieldProperty="PayloadSize" fieldIndex="1" type="UINT_8"/>
+            </header>
+            <footer/>
+
+            <message name="Message1"/>
+            <message name="Message11"/>
+
+        </codec>
+
+        <codec name="EasyCodec_IdLen_BigEnd_HeaderArray" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgId" fieldProperty="Id" fieldIndex="0" type="UINT_8"/>
+                <field name="msglength" fieldProperty="TotalSize" fieldIndex="1" type="UINT_8"/>
+                <field name="fieldHeaderArr" fieldIndex="2" type="UINT_8_Array_Len3"/>
+            </header>
+            <footer/>
+
+            <message name="Message1"/>
+
+        </codec>
+
+        <codec name="EasyCodec_PreIdLen_BigEnd_HeaderArray" byteOrder="BIG_ENDIAN">
+            <header>
+                <field name="msgPreamble123" fieldProperty="Preamble" fieldIndex="0" type="PreambleNoConstSizeArray"
+                       constantElementCount="2"
+                       defaultValue="{(byte)0x0A, (byte)0x0B}"/>
+                <field name="msgId" fieldProperty="Id" fieldIndex="1" type="UINT_8"/>
+                <field name="msglength" fieldProperty="TotalSize" fieldIndex="2" type="UINT_8"/>
+            </header>
+            <footer/>
+
+            <message name="Message1"/>
+
+        </codec>
+    </codecs>
+
+</TA>
